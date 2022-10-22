@@ -4,8 +4,8 @@ const env = import.meta.env;
 
 export default function Footer() {
   return (
-    <footer className="bg-zinc-800 px-4">
-        <div className="md:flex py-12 max-w-7xl mx-auto sm:px-3 text-white">
+    <footer className="bg-zinc-800 text-white mt-8 px-4">
+        <div className="md:flex py-12 max-w-7xl mx-auto sm:px-3">
           <div className="footer-box w-full">
             <b className="text-sm py-1">CONTENT</b>
             <div className="text-sm py-1"><a href="{{ url('track-order') }}">Track Order</a></div>

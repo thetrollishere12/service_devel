@@ -28,11 +28,11 @@ Route::get('/b/{id}',function(){
     return Inertia::render('Business/Profile');
 })->name('b');
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+// Route::middleware([
+//     'auth:sanctum',
+//     config('jetstream.auth_session'),
+//     'verified',
+// ])->group(function () {
 
 
     // Route::get('/dashboard', function () {
@@ -79,4 +79,4 @@ Route::middleware([
 
     Route::get('business/setting','BusinessController@setting');
 
-});
+// });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScreenerStage from '@/CustomComponents/ScreenerStage';
 import Checkbox from '@/Components/Checkbox';
@@ -7,6 +7,59 @@ import SelectHours from '@/CustomComponents/SelectHours';
 import { InertiaLink } from '@inertiajs/inertia-react';
 
 export default function Dashboard() {
+
+    // constructor(){
+    //     super(){
+
+    //         this.state = {
+    //             "monday": [
+    //             {
+    //                 "from":0,
+    //                 "to":24
+    //             },{
+    //                 "from":0,
+    //                 "to":24
+    //             }],
+    //             "tuesday":[],
+    //             "wednesday":[],
+    //             "thursday":[],
+    //             "friday":[],
+    //             "saturday":[],
+    //             "sunday":[],
+    //         };
+
+    //     }
+    // }
+
+
+    const [date, setInputFields] = useState({
+        monday: [
+        {
+            from:0,
+            to:24
+        },{
+            from:0,
+            to:24
+        }],
+        tuesday:[],
+        wednesday:[],
+        thursday:[],
+        friday:[],
+        saturday:[],
+        sunday:[],
+    });
+
+    console.log(date);
+
+    function add(day) {
+        setInputFields([...date, {
+            from:0,
+            to:24
+        }])
+        console.log(date);
+    }
+
+
   return (
     <AppLayout>
 
@@ -26,10 +79,10 @@ export default function Dashboard() {
                 </div>
 
                 <div className="col-span-2 flex gap-4 items-center">
-                    <SelectHours/>
-                    <div>to</div>
-                    <SelectHours/>
-                    <div className="text-2xl main-t-c cursor-pointer">+</div>
+                    {date.monday.map(date => (
+                        <SelectHours></SelectHours>
+                    ))}
+                    <div onClick={() => add('monday')} className="text-2xl main-t-c cursor-pointer">+</div>
                 </div>
 
             </div>

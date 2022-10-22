@@ -2,9 +2,30 @@ import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScreenerStage from '@/CustomComponents/ScreenerStage';
 
-import { InertiaLink } from '@inertiajs/inertia-react';
+import { InertiaLink, useForm } from '@inertiajs/inertia-react';
+
+import PrimaryButton from '@/Components/PrimaryButton';
+
+import useRoute from '@/Hooks/useRoute';
+
+import classNames from 'classnames';
+
+
 
 export default function Dashboard() {
+
+  const route = useRoute();
+  const form = useForm({
+    name: '',
+  });
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    form.post('/user/business/type', {
+      onFinish: () => form.reset('name'),
+    });
+  }
+
   return (
     <AppLayout>
 
@@ -19,17 +40,20 @@ export default function Dashboard() {
             <div className="text-sm">
               
               <div>Business Name</div>
+              <form onSubmit={onSubmit}>
+                <div>
+                  <input value={form.data.name} onChange={e => form.setData('name', e.currentTarget.value)} required minlength="5" maxlength="100" className="border rounded my-2 py-2 px-3 w-full" placeholder={'Enter your business name'}/>
+                </div>
 
-              <div>
-                <input className="border rounded my-2 py-2 px-3 w-full" placeholder={'Enter your business name'}/>
-              </div>
+                <div>
 
-              <div>
-                <InertiaLink href={'/user/business/type'}>
-                <button className="main-bg-c text-white mt-4 w-full text-center rounded p-2.5">Continue</button>
-                </InertiaLink>
-              </div>
+                  <PrimaryButton
+                    className={classNames('main-bg-c text-white w-full text-center rounded', { 'opacity-25': form.processing })}
+                    disabled={form.processing}
+                  >Continue</PrimaryButton>
 
+                </div>
+                </form>
             </div>
 
           </div>
