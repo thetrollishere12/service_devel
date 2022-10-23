@@ -116,7 +116,7 @@ export default function Dashboard() {
                       : date[i].map((data, j) =>
                         <div className='flex gap-4 p-1'>
                           <SelectHours change={onChangeHour} index={i} sub={j} term={data} />
-                          <div onClick={() => add(i, j)} className="text-2xl main-t-c cursor-pointer">{date[i][j].status == "add" ? "+" : <span style={{ color: "red" }}>×</span>}</div>
+                          <div onClick={() => add(i, j)} className="text-2xl main-t-c cursor-pointer">{date[i][j].status == "add" ? "+" : <span className="text-red-600">×</span>}</div>
                         </div>
                       )
                     }

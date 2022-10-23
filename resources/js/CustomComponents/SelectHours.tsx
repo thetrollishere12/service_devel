@@ -25,7 +25,7 @@ export default function SelectHours(props: IProp) {
 		const { change, term, index, sub } = props;
 		if (parseInt(e.target.value) > parseInt(term.to)) {
 			// alert("wrong");
-			setFrom(term.to);
+			setFrom(from);
 		} else {
 			term.from = e.target.value;
 			change(index, sub, term);
@@ -49,11 +49,12 @@ export default function SelectHours(props: IProp) {
 			<select onChange={changeFrom} className="text-xs rounded border-gray-200">
 				{
 
-					arr.map((data, i) =>
+					arr.map((data, i) => i < parseInt(to) &&
 						<option key={i} selected={parseInt(from) == i ? true : false} value={i} >{floor((i % half) / step) < 10 && 0}{floor((i % half) / step)} : {floor(i % half) % step * interval < 10 && 0}{floor(i % half) % step * interval} {i < arr.length / 2 ? "AM" : "PM"}</option>
 					)
 				}
 			</select>
+			<span className="flex items-center">to</span>
 			<select onChange={changeTo} className="text-xs rounded border-gray-200">
 				{
 
