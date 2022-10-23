@@ -128,7 +128,7 @@ export default function Dashboard() {
 
             <div>
               <InertiaLink href={nextHref}>
-                <button className="main-bg-c text-white mt-4 w-full text-center rounded p-2.5" disabled={nextHref == "#"} style={{ cursor: nextHref == "#" && "no-drop" }}>Continue</button>
+                <button className="main-bg-c text-white mt-4 w-full text-center rounded p-2.5" disabled={nextHref == "#"} style={{ cursor: nextHref == "#" ? "no-drop" : "grab" }}>Continue</button>
               </InertiaLink>
             </div>
 
