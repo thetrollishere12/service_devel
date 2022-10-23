@@ -6,11 +6,6 @@ import SelectHours from '@/CustomComponents/SelectHours';
 
 import { InertiaLink } from '@inertiajs/inertia-react';
 
-type period = {
-  from: string;
-  to: string;
-}
-
 export default function Dashboard() {
 
   // constructor(){
@@ -36,13 +31,6 @@ export default function Dashboard() {
   //     }
   // }
 
-
-
-  // {
-  //   from: 0,
-  //     to: 24
-  // }
-
   const [date, setInputFields] = useState([
     [{ from: 0, to: 95, status: "add" }],
     [{ from: 0, to: 95, status: "add" }],
@@ -53,6 +41,7 @@ export default function Dashboard() {
     [{ from: 0, to: 95, status: "add" }],
   ]);
   const [checkState, setCheckState] = useState([false, false, false, false, false, false, false]);
+  const [nextHref, setNextHref] = useState("#");
 
   const days = ["Monday", "Thursday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -78,6 +67,13 @@ export default function Dashboard() {
   function onChangeCheck(day: number) {
     checkState[day] = !checkState[day];
     setCheckState([...checkState]);
+    var checkCnt = 0;
+    checkState.map(data => data && checkCnt++);
+    if (checkCnt != 0) {
+      setNextHref("/user/business/workplace");
+    } else {
+      setNextHref("#");
+    }
 
     if (!checkState[day]) {
       date[day] = [{ from: 0, to: 95, status: "add" }];
@@ -129,104 +125,10 @@ export default function Dashboard() {
                 </div>
               )
             }
-            {/* <div className="grid grid-cols-3 py-2">
-
-              <div className="col-span-1">
-                <Checkbox checked />
-                <span className="pl-4">Monday</span>
-              </div>
-
-              <div className="col-span-2 flex gap-4 items-center">
-                <div className="pl-2">Closed</div>
-                {date.monday.map(date => (
-                  <SelectHours></SelectHours>
-                ))}
-                <div onClick={() => add('monday')} className="text-2xl main-t-c cursor-pointer">+</div>
-              </div>
-
-            </div>
-
-            <div className="grid grid-cols-3 py-2">
-
-              <div className="col-span-1">
-                <Checkbox />
-                <span className="pl-4">Thursday</span>
-              </div>
-
-              <div className="col-span-2 flex gap-4 items-center">
-                <div className="pl-2">Closed</div>
-              </div>
-
-            </div>
-
-            <div className="grid grid-cols-3 py-2">
-
-              <div className="col-span-1">
-                <Checkbox />
-                <span className="pl-4">Wednesday</span>
-              </div>
-
-              <div className="col-span-2 flex gap-4 items-center">
-                <div className="pl-2">Closed</div>
-              </div>
-
-            </div>
-
-            <div className="grid grid-cols-3 py-2">
-
-              <div className="col-span-1">
-                <Checkbox />
-                <span className="pl-4">Thursday</span>
-              </div>
-
-              <div className="col-span-2 flex gap-4 items-center">
-                <div className="pl-2">Closed</div>
-              </div>
-
-            </div>
-
-            <div className="grid grid-cols-3 py-2">
-
-              <div className="col-span-1">
-                <Checkbox />
-                <span className="pl-4">Friday</span>
-              </div>
-
-              <div className="col-span-2 flex gap-4 items-center">
-                <div className="pl-2">Closed</div>
-              </div>
-
-            </div>
-
-            <div className="grid grid-cols-3 py-2">
-
-              <div className="col-span-1">
-                <Checkbox />
-                <span className="pl-4">Saturday</span>
-              </div>
-
-              <div className="col-span-2 flex gap-4 items-center">
-                <div className="pl-2">Closed</div>
-              </div>
-
-            </div>
-
-            <div className="grid grid-cols-3 py-2">
-
-              <div className="col-span-1">
-                <Checkbox />
-                <span className="pl-4">Sunday</span>
-              </div>
-
-              <div className="col-span-2 flex gap-4 items-center">
-                <div className="pl-2">Closed</div>
-              </div>
-
-            </div> */}
 
             <div>
-              <InertiaLink href={'/user/business/workplace'}>
-                <button className="main-bg-c text-white mt-4 w-full text-center rounded p-2.5">Continue</button>
+              <InertiaLink href={nextHref}>
+                <button className="main-bg-c text-white mt-4 w-full text-center rounded p-2.5" disabled={nextHref == "#"} style={{ cursor: nextHref == "#" && "no-drop" }}>Continue</button>
               </InertiaLink>
             </div>
 
