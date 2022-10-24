@@ -3,8 +3,10 @@ import AppLayout from '@/Layouts/AppLayout';
 import ScreenerStage from '@/CustomComponents/ScreenerStage';
 import Checkbox from '@/Components/Checkbox';
 import SelectHours from '@/CustomComponents/SelectHours';
+import classNames from 'classnames';
+import PrimaryButton from '@/Components/PrimaryButton';
 
-import { InertiaLink } from '@inertiajs/inertia-react';
+import { InertiaLink, useForm } from '@inertiajs/inertia-react';
 
 export default function Dashboard() {
 
@@ -39,13 +41,18 @@ export default function Dashboard() {
     [{ from: 0, to: 95, status: "add" }],
     [{ from: 0, to: 95, status: "add" }],
     [{ from: 0, to: 95, status: "add" }],
-  ]);
+  ] as any);
   const [checkState, setCheckState] = useState([false, false, false, false, false, false, false]);
   const [nextHref, setNextHref] = useState("#");
 
-  const days = ["Monday", "Thursday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  var tmpDate = {} as any
 
-  console.log(date);
+  const form = useForm({
+    date: [] as any,
+  })
+
+  // console.log(date);
 
   function add(day: any, sub: any) {
     if (checkState[day]) {
@@ -61,6 +68,10 @@ export default function Dashboard() {
       }
       setInputFields([...date]);
     }
+    days.map((data, i) => {
+      tmpDate[data] = checkState[i] ? date[i] : [];
+    })
+    form.setData('date', tmpDate);
 
   }
 
@@ -79,11 +90,34 @@ export default function Dashboard() {
       date[day] = [{ from: 0, to: 95, status: "add" }];
       setInputFields([...date]);
     }
+    days.map((data, i) => {
+      tmpDate[data] = checkState[i] ? date[i] : [];
+    })
+    form.setData('date', tmpDate);
+
   }
 
   function onChangeHour(index: any, sub: any, value: any) {
     date[index][sub] = value;
     setInputFields([...date]);
+    days.map((data, i) => {
+      tmpDate[data] = checkState[i] ? date[i] : [];
+    })
+    form.setData('date', tmpDate);
+  }
+
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    days.map((data, i) => {
+      tmpDate[data] = checkState[i] ? date[i] : [];
+    })
+    form.setData('date', tmpDate);
+
+    form.post("/user/business/workplace", {
+      onFinish: () => form.reset('type'),
+    });
   }
 
   return (
@@ -95,45 +129,52 @@ export default function Dashboard() {
 
           <h1 className="font-bold text-3xl text-center mb-6">Add your store working hours</h1>
 
-          <div className="bg-white overflow-hidden shadow-xl sm:rounded-lg p-20">
+          <form onSubmit={onSubmit}>
+            <div className="bg-white overflow-hidden shadow-xl sm:rounded-lg p-20">
 
-            {
-              days.map((day, i) =>
-                <div className="grid grid-cols-3 py-2">
+              {
+                days.map((day, i) =>
+                  <div className="grid grid-cols-3 py-2">
 
-                  <div className="col-span-1">
-                    <Checkbox onChange={() => onChangeCheck(i)} checked={checkState[i]} />
-                    <span className="pl-4">{day}</span>
-                  </div>
+                    <div className="col-span-1">
+                      <Checkbox onChange={() => onChangeCheck(i)} checked={checkState[i]} />
+                      <span className="pl-4">{day}</span>
+                    </div>
 
-                  <div className="col-span-2 gap-4 items-center">
-                    {checkState[i] == false ?
-                      <div className="pl-2">Closed</div>
-                      : date[i].map((data, j) =>
-                        <div className='flex gap-4 p-1'>
-                          <SelectHours change={onChangeHour} index={i} sub={j} term={data} />
-                          <div onClick={() => add(i, j)} className="text-2xl main-t-c cursor-pointer">{date[i][j].status == "add" ? "+" : <span className="text-red-600">×</span>}</div>
-                        </div>
-                      )
-                    }
-                    {/* {date.monday.map(date => (
+                    <div className="col-span-2 gap-4 items-center">
+                      {checkState[i] == false ?
+                        <div className="pl-2">Closed</div>
+                        : date[i].map((data: any, j: any) =>
+                          <div className='flex gap-4 p-1'>
+                            <SelectHours change={onChangeHour} index={i} sub={j} term={data} />
+                            <div onClick={() => add(i, j)} className="text-2xl main-t-c cursor-pointer">{date[i][j].status == "add" ? "+" : <span className="text-red-600">×</span>}</div>
+                          </div>
+                        )
+                      }
+                      {/* {date.monday.map(date => (
                       <SelectHours></SelectHours>
                     ))} */}
 
+                    </div>
+
                   </div>
+                )
+              }
 
-                </div>
-              )
-            }
+              <div>
+                {/* <InertiaLink href={nextHref}> */}
+                <PrimaryButton
+                  className={classNames('main-bg-c text-white mt-4 w-full text-center rounded p-2.5')}
+                  disabled={nextHref == "#"}
+                  style={{ cursor: nextHref == "#" ? "no-drop" : "grab", height: "2.5rem" }}>
 
-            <div>
-              <InertiaLink href={nextHref}>
-                <button className="main-bg-c text-white mt-4 w-full text-center rounded p-2.5" disabled={nextHref == "#"} style={{ cursor: nextHref == "#" ? "no-drop" : "grab" }}>Continue</button>
-              </InertiaLink>
+                  Continue</PrimaryButton>
+                {/* <button className="main-bg-c text-white mt-4 w-full text-center rounded p-2.5" disabled={nextHref == "#"} style={{ cursor: nextHref == "#" ? "no-drop" : "grab" }}>Continue</button> */}
+                {/* </InertiaLink> */}
+              </div>
+
             </div>
-
-          </div>
-
+          </form>
         </div>
       </div>
     </AppLayout>

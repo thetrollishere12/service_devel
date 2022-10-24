@@ -47,10 +47,15 @@ export default function SelectHours(props: IProp) {
 	return (
 		<div style={{ display: "contents" }}>
 			<select onChange={changeFrom} className="text-xs rounded border-gray-200">
+
 				{
 
 					arr.map((data, i) => i < parseInt(to) &&
-						<option key={i} selected={parseInt(from) == i ? true : false} value={i} >{floor((i % half) / step) < 10 && 0}{floor((i % half) / step)} : {floor(i % half) % step * interval < 10 && 0}{floor(i % half) % step * interval} {i < arr.length / 2 ? "AM" : "PM"}</option>
+						<option key={i} selected={parseInt(from) == i ? true : false} value={i} >
+							{floor((i % half) / step) == 0 ? 1 : floor((i % half) / step) < 10 && 0}{floor((i % half) / step) == 0 ? 2 : floor((i % half) / step)}
+							: {floor(i % half) % step * interval < 10 && 0}{floor(i % half) % step * interval}
+							{i < arr.length / 2 ? "AM" : "PM"}
+						</option>
 					)
 				}
 			</select>
@@ -58,8 +63,11 @@ export default function SelectHours(props: IProp) {
 			<select onChange={changeTo} className="text-xs rounded border-gray-200">
 				{
 
-					arr.map((data, i) => i > parseInt(from) &&
-						<option key={i} selected={parseInt(to) == i ? true : false} value={i} >{floor((i % half) / step) < 10 && 0}{floor((i % half) / step)} : {floor(i % half) % step * interval < 10 && 0}{floor(i % half) % step * interval} {i < arr.length / 2 ? "AM" : "PM"}</option>
+					arr.map((data, i) => i != 0 && i > parseInt(from) &&
+						<option key={i} selected={parseInt(to) == i ? true : false} value={i} >
+							{floor((i % half) / step) == 0 ? 1 : floor((i % half) / step) < 10 && 0}{floor((i % half) / step) == 0 ? 2 : floor((i % half) / step)}
+							: {floor(i % half) % step * interval < 10 && 0}{floor(i % half) % step * interval}
+							{i < arr.length / 2 ? "AM" : "PM"}</option>
 					)
 				}
 			</select>
