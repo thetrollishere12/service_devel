@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import PrimaryButton from '@/Components/PrimaryButton';
 
 import { InertiaLink, useForm } from '@inertiajs/inertia-react';
+import { floor } from 'lodash';
 
 export default function Dashboard() {
 
@@ -106,11 +107,27 @@ export default function Dashboard() {
     form.setData('date', tmpDate);
   }
 
+  function convertDateFormat(value: any) {
+    let hr, mm;
+    hr = floor(parseInt(value) * 15 / 60);
+    mm = parseInt(value) * 15 % 60;
+    if (hr < 10)
+      hr = "0" + hr;
+    if (mm < 10)
+      mm = "0" + mm;
+    return hr + ":" + mm;
+  }
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     days.map((data, i) => {
+      date[i].map((item: any) => {
+        const { from, to } = item;
+        item.from = convertDateFormat(item.from);
+        item.to = convertDateFormat(item.to);
+
+      })
       tmpDate[data] = checkState[i] ? date[i] : [];
     })
     form.setData('date', tmpDate);
