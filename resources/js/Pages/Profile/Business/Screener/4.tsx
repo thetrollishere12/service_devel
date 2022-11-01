@@ -43,14 +43,14 @@ export default function Dashboard() {
     [{ from: 0, to: 95, status: "add" }],
     [{ from: 0, to: 95, status: "add" }],
   ] as any);
-  const [checkState, setCheckState] = useState([false, false, false, false, false, false, false]);
-  const [nextHref, setNextHref] = useState("#");
+  const [checkState, setCheckState] = useState([true, false, false, false, false, false, false]);
+  const [nextHref, setNextHref] = useState("/user/business/workplace");
 
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   var tmpDate = {} as any
-
+  tmpDate["Monday"] = [{ from: 0, to: 95, status: "add" }];
   const form = useForm({
-    date: [] as any,
+    date: tmpDate as any,
   })
 
   // console.log(date);
@@ -122,18 +122,13 @@ export default function Dashboard() {
     e.preventDefault();
 
     days.map((data, i) => {
-      date[i].map((item: any) => {
-        const { from, to } = item;
-        item.from = convertDateFormat(item.from);
-        item.to = convertDateFormat(item.to);
-
-      })
       tmpDate[data] = checkState[i] ? date[i] : [];
     })
     form.setData('date', tmpDate);
 
+
     form.post("/user/business/workplace", {
-      onFinish: () => form.reset('type'),
+      onFinish: () => form.reset(),
     });
   }
 
