@@ -217,7 +217,7 @@ export default function DemoFullCalendar() {
 
 
     return (
-        <AppLayout>
+        <AppLayout title="month">
             <BusinessLeftNav />
             <div className="pl-24 pr-8">
                 {<div style={{ visibility: "hidden" }}>

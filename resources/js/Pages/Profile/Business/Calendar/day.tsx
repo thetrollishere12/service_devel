@@ -231,7 +231,7 @@ export default function DemoFullCalendar() {
 
 
     return (
-        <AppLayout>
+        <AppLayout title="day">
             <BusinessLeftNav />
             <div className="grid grid-rows-2 grid-flow-col gap-4">
                 <div className="row-span-2 col-span-2 pl-36 pt-36">
