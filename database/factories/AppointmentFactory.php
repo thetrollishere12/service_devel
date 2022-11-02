@@ -23,7 +23,7 @@ class AppointmentFactory extends Factory
             'name' => $this->faker->randomElement(['Thom','Jane','Winston','Conor']),
             'service' => $this->faker->randomElement(['Haircut','Trim','Lash','Wash']),
             'date' => $this->faker->dateTimeBetween('+1 week', '+8 week'),
-            'duration' => $this->faker->time(),
+            'duration' => $this->faker->randomElement(['00:15:00','00:30:00','00:45:00','01:00:00','01:15:00','01:30:00']),
         ];
     }
 }
