@@ -20,7 +20,8 @@ return new class extends Migration
             $table->integer('customer_id');
             $table->string('name');
             $table->string('service');
-            $table->datetime('date');
+            $table->datetime('start_date');
+            $table->datetime('end_date');
             $table->time('duration');
             $table->timestamps();
         });
