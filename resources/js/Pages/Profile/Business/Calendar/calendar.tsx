@@ -160,22 +160,41 @@ export default function DemoFullCalendar() {
         event: [],
     });
 
-    const events = [
+    const dbData = [
         {
-            // id: "a",
-            title: "lame event",
-            start: startDate,
-            end: endDate2,
-            displayAsCustom: false
-        },
-        {
-            // id: "b",
-            title: "lame event",
-            start: startDate,
-            end: endDate2,
-            displayAsCustom: false
+            start_date: new Date(),
+            // duration : String,
+            end_date: new Date()
         }
-    ];
+    ]
+
+    var events: any[] = [];
+
+    dbData.map((data, i) => {
+        events[i] = {
+            start: data.start_date,
+            end: data.end_date,
+            allday: false
+        }
+    })
+
+
+    // const events = [
+    //     {
+    //         // id: "a",
+    //         title: "lame event",
+    //         start: startDate,
+    //         end: endDate2,
+    //         displayAsCustom: false
+    //     },
+    //     {
+    //         // id: "b",
+    //         title: "lame event",
+    //         start: startDate,
+    //         end: endDate2,
+    //         displayAsCustom: false
+    //     }
+    // ];
 
     const [canDragToMove, setCanDragToMove] = useState<boolean>(true);
     const handleCanDragToMove = () => {
@@ -217,7 +236,7 @@ export default function DemoFullCalendar() {
 
 
     return (
-        <AppLayout>
+        <AppLayout title="month">
             <BusinessLeftNav />
             <div className="pl-24 pr-8">
                 {<div style={{ visibility: "hidden" }}>
