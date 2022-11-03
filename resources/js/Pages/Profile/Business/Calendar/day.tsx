@@ -14,6 +14,7 @@ import { InertiaLink, useForm } from '@inertiajs/inertia-react';
 import Calendar from "react-calendar";
 import { makeStyles } from "@material-ui/core/styles";
 import "react-calendar/dist/Calendar.css";
+import { duration } from "moment";
 
 export const StyleWrapper = styled.div`
 .fc-addEventButton-button.fc-button.fc-button-primary{
@@ -174,22 +175,24 @@ export default function DemoFullCalendar() {
         event: [],
     });
 
-    const events = [
+    const dbData = [
         {
-            // id: "a",
-            title: "lame event",
-            start: startDate,
-            end: endDate2,
-            displayAsCustom: false
-        },
-        {
-            // id: "b",
-            title: "lame event",
-            start: startDate,
-            end: endDate2,
-            displayAsCustom: false
+            start_date: new Date(),
+            // duration : String,
+            end_date: new Date()
         }
-    ];
+    ]
+
+    var events: any[] = [];
+
+    dbData.map((data, i) => {
+        events[i] = {
+            start: data.start_date,
+            end: data.end_date,
+            allday: false
+        }
+    })
+
 
     const [canDragToMove, setCanDragToMove] = useState<boolean>(true);
     const handleCanDragToMove = () => {
@@ -229,13 +232,21 @@ export default function DemoFullCalendar() {
         }
     };
 
+    const dayClick = (data) => {
+        //@ts-ignore
+        console.log(data);
+        const calendarApi = calendarRef?.current?.getApi();
+        calendarApi.gotoDate(data);
+    }
 
     return (
         <AppLayout title="day">
             <BusinessLeftNav />
             <div className="grid grid-rows-2 grid-flow-col gap-4">
                 <div className="row-span-2 col-span-2 pl-36 pt-36">
-                    <Calendar />
+                    <Calendar
+                        onClickDay={dayClick}
+                    />
                 </div>
                 <div className="row-span-6 col-span-10 pr-16">
                     {<div style={{ visibility: "hidden" }}>
@@ -263,6 +274,7 @@ export default function DemoFullCalendar() {
                             editable={canDragToMove}
                             selectable={canDragToCreate}
                             select={selectCallback}
+                            slotDuration={{ hours: 0.25 }}
                             eventStartEditable={canDragToMove}
                             eventDurationEditable={canDragToMove}
                             ref={calendarRef}
