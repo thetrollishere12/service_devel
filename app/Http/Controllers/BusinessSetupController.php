@@ -48,12 +48,5 @@ class BusinessSetupController extends Controller
         return Inertia::render('Profile/Business/Screener/5');
     }
 
-    public function day(){
-        return Inertia::render('Profile/Business/Calendar/day');
-    }
-
     
-    public function calendar(){
-        return Inertia::render('Profile/Business/Calendar/calendar');
-    }
 }

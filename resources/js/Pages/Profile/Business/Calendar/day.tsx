@@ -9,7 +9,7 @@ import { sliceEvents, createPlugin } from "@fullcalendar/react";
 import AppLayout from '@/Layouts/AppLayout';
 import BusinessLeftNav from '@/CustomComponents/BusinessLeftNav';
 import styled from "@emotion/styled";
-import { InertiaLink, useForm } from '@inertiajs/inertia-react';
+import { useForm, usePage } from '@inertiajs/inertia-react';
 
 import Calendar from "react-calendar";
 import { makeStyles } from "@material-ui/core/styles";
@@ -94,6 +94,29 @@ const customViewPlugin = createPlugin({ views: { custom: customView } });
 export default function DemoFullCalendar() {
     const calendarRef = useRef(null);
 
+    const { appointments } = usePage().props
+
+
+    const startDate = new Date();
+    const endDate = new Date();
+    const endDate2 = new Date();
+    endDate2.setHours(2);
+    endDate.setHours(24);
+
+    const form = useForm({
+        event: [],
+    });
+
+    var events: any[] = [];
+
+    appointments.map((data, i) => {
+        events[i] = {
+            start: data.start_date,
+            end: data.end_date,
+            allday: false
+        }
+    })
+
     //Get an event by its ID once the calendar has loaded
     useEffect(() => {
         //@ts-ignore
@@ -137,7 +160,7 @@ export default function DemoFullCalendar() {
     };
 
     const toMonth = () => {
-        form.get('/user/business/calendar', {
+        form.get('/user/appointment/calendar', {
             onFinish: () => form.reset(),
         });
     };
@@ -164,35 +187,6 @@ export default function DemoFullCalendar() {
             click: toMonth
         }
     };
-
-    const startDate = new Date();
-    const endDate = new Date();
-    const endDate2 = new Date();
-    endDate2.setHours(2);
-    endDate.setHours(24);
-
-    const form = useForm({
-        event: [],
-    });
-
-    const dbData = [
-        {
-            start_date: new Date(),
-            // duration : String,
-            end_date: new Date()
-        }
-    ]
-
-    var events: any[] = [];
-
-    dbData.map((data, i) => {
-        events[i] = {
-            start: data.start_date,
-            end: data.end_date,
-            allday: false
-        }
-    })
-
 
     const [canDragToMove, setCanDragToMove] = useState<boolean>(true);
     const handleCanDragToMove = () => {

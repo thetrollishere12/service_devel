@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\AppointmentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -69,20 +70,6 @@ Route::get('/b/{id}',function(){
 
     Route::match(['get','post'],'user/business/workplace','BusinessSetupController@workplace')->name('profile.business.workplace');
 
-    Route::get('user/business/day',function(){
-        return Inertia::render('Profile/Business/Calendar/day');
-    });
-
-    Route::get('user/business/calendar',function(){
-        return Inertia::render('Profile/Business/Calendar/calendar');
-    });
-
-    // Route::match(['get','post'],'user/business/day','BusinessSetupController@day')->name('profile.business.day');
-
-    // Route::match(['get','post'],'user/business/calendar','BusinessSetupController@calendar')->name('profile.business.calendar');
-
-
-
     Route::get('business/dashboard','BusinessController@index');
 
     Route::resource('business/category', 'CategoryController');
@@ -94,3 +81,10 @@ Route::get('/b/{id}',function(){
     Route::get('business/setting','BusinessController@setting');
 
 // });
+
+
+    Route::resource('appointments',AppointmentController::class);
+
+    Route::get('user/appointment/calendar', [AppointmentController::class, 'calendar']);
+    Route::get('user/appointment/day', [AppointmentController::class, 'day']);
+

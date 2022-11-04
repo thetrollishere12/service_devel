@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AppointmentController extends Controller
 {
@@ -15,6 +16,23 @@ class AppointmentController extends Controller
     public function index()
     {
         //
+        // $appointment = Appointment::all();
+        // return Inertia::render('Appointment/Index', ['appointments' => $appointment]);
+        return Appointment::select('start_date','end_date','service')->get();
+    }
+
+    public function day(){
+        $appointment = Appointment::all();
+        return Inertia::render('Profile/Business/Calendar/day', ['appointments' => $appointment]);
+        // return Inertia::render('Profile/Business/Calendar/day');
+    }
+
+    
+    public function calendar(){
+        $appointment = Appointment::all();
+        return Inertia::render('Profile/Business/Calendar/calendar', ['appointments' => $appointment]);
+        
+        // return Inertia::render('Profile/Business/Calendar/calendar');
     }
 
     /**
@@ -47,6 +65,9 @@ class AppointmentController extends Controller
     public function show(Appointment $appointment)
     {
         //
+        return response()->json([
+            'appointment'=>$appointment
+        ]);
     }
 
     /**
