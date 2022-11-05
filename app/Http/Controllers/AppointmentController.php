@@ -21,16 +21,18 @@ class AppointmentController extends Controller
         return Appointment::select('start_date','end_date','service')->get();
     }
 
-    public function day(){
+    public function day($day){
         $appointment = Appointment::all();
-        return Inertia::render('Profile/Business/Calendar/day', ['appointments' => $appointment]);
+        // !$day && $day = "2022-11-05";
+        return Inertia::render('Profile/Business/Calendar/day', ['appointments' => $appointment, 'day' => $day]);
         // return Inertia::render('Profile/Business/Calendar/day');
     }
 
     
-    public function calendar(){
+    public function calendar($month = null){
         $appointment = Appointment::all();
-        return Inertia::render('Profile/Business/Calendar/calendar', ['appointments' => $appointment]);
+        !$month && $month = "2022-11";
+        return Inertia::render('Profile/Business/Calendar/calendar', ['appointments' => $appointment, 'month' => $month]);
         
         // return Inertia::render('Profile/Business/Calendar/calendar');
     }

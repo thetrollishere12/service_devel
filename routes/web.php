@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
 
 use App\Http\Controllers\AppointmentController;
 /*
@@ -85,6 +86,16 @@ Route::get('/b/{id}',function(){
 
     Route::resource('appointments',AppointmentController::class);
 
-    Route::get('user/appointment/calendar', [AppointmentController::class, 'calendar']);
-    Route::get('user/appointment/day', [AppointmentController::class, 'day']);
+    Route::get('user/appointment/day/', function() {
+        $date = date('Y-m-d');
+        return redirect('user/appointment/day/'.$date);
+    });
+
+    Route::get('user/appointment/day/{day}', [AppointmentController::class, 'day']);
+    
+    Route::get('user/appointment/month/', function() {
+        $date = date('Y-m');
+        return redirect('user/appointment/month/'.$date);
+    });
+    Route::get('user/appointment/month/{month}', [AppointmentController::class, 'calendar']);
 

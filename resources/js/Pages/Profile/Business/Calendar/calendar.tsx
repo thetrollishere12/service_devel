@@ -15,7 +15,7 @@ export const StyleWrapper = styled.div`
 .fc-addEventButton-button.fc-button.fc-button-primary{
     background: #172153;
 }  
-.fc-next-button.fc-button.fc-button-primary,.fc-prev-button.fc-button.fc-button-primary{
+.fc-customnext-button.fc-button.fc-button-primary,.fc-customprev-button.fc-button.fc-button-primary{
     background: #ffffff00;
     border-color: aliceblue;
     color: black;
@@ -62,8 +62,8 @@ const customView = (props) => {
 };
 
 const customEventContent = (event) => {
-    console.log("customEvent", event);
-    console.log("customEventCurrentData", event.event.toPlainObject());
+    // console.log("customEvent", event);
+    // console.log("customEventCurrentData", event.event.toPlainObject());
     const plainEvent = event.event.toPlainObject();
     if (plainEvent.extendedProps && plainEvent.extendedProps.displayAsCustom) {
         return (
@@ -87,8 +87,8 @@ const customViewPlugin = createPlugin({ views: { custom: customView } });
 export default function DemoFullCalendar() {
     const calendarRef = useRef(null);
 
-    const { appointments } = usePage().props
-
+    const { appointments, month } = usePage().props
+    // console.log(month);
 
     const startDate = new Date();
     const endDate = new Date();
@@ -115,8 +115,9 @@ export default function DemoFullCalendar() {
         //@ts-ignore
         const calendarApi = calendarRef?.current?.getApi();
         const event = calendarApi.getEventById("a");
-        console.log(appointments);
-    });
+        // console.log(appointments);
+        calendarApi.gotoDate(month);
+    }, []);
 
     const customViews = {
         timeGridFourDay: {
@@ -147,7 +148,9 @@ export default function DemoFullCalendar() {
     };
 
     const toDay = () => {
-        form.get('/user/appointment/day', {
+        var now = new Date();
+        // console.log(now.toISOString().split('T')[0])
+        form.get(`/user/appointment/day/${now.toISOString().split('T')[0]}`, {
             onFinish: () => form.reset(),
         });
     };
@@ -156,6 +159,25 @@ export default function DemoFullCalendar() {
         // form.get('/user/business/calendar', {
         //     onFinish: () => form.reset(),
         // });
+    };
+
+    const prevMonth = () => {
+        const calendarApi = calendarRef?.current?.getApi();
+        calendarApi.prev();
+        var to = customizeMonth(calendarApi?.getCurrentData().viewTitle);
+        form.get(`/user/appointment/month/${to}`, {
+            onFinish: () => form.reset(),
+        });
+    };
+
+    const nextMonth = () => {
+
+        const calendarApi = calendarRef?.current?.getApi();
+        calendarApi.next();
+        var to = customizeMonth(calendarApi?.getCurrentData().viewTitle);
+        form.get(`/user/appointment/month/${to}`, {
+            onFinish: () => form.reset(),
+        });
     };
 
     const customButtons = {
@@ -170,8 +192,38 @@ export default function DemoFullCalendar() {
         monthEventButton: {
             text: "Month",
             click: toMonth
+        },
+        customprev: {
+            text: "<",
+            click: prevMonth
+        },
+        customnext: {
+            text: ">",
+            click: nextMonth
         }
     };
+
+    const customizeMonth = (data: String) => {
+        let array = data.split(" ");
+        let month = { "January": "01", "February": "02", "March": "03", "April": "04", "May": "05", "June": "06", "July": "07", "August": "08", "September": "09", "October": "10", "November": "11", "December": "12" };
+        let res: String = "";
+        res = array[1] + "-" + month[array[0]];
+        // console.log(res);
+        return res;
+    }
+
+    // const gotoMonth1 = (data) => {
+    //     const calendarApi = calendarRef?.current?.getApi();
+    //     // calendarApi.prev();
+    //     if (calendarApi) {
+    //         var to = customizeMonth(calendarApi?.getCurrentData().viewTitle);
+    //         form.get(`/user/appointment/month/${to}`, {
+    //             onFinish: () => form.reset(),
+    //         });
+    //     }
+
+    //     // console.log(calendarApi.dateEnv);
+    // }
 
     const [canDragToMove, setCanDragToMove] = useState<boolean>(true);
     const handleCanDragToMove = () => {
@@ -184,21 +236,24 @@ export default function DemoFullCalendar() {
     };
 
     const selectCallback = (data) => {
+        // console.log(data);
+        form.get(`/user/appointment/day/${data.startStr}`, {
+            onFinish: () => form.reset(),
+        });
+        // let title = prompt("Please enter a new title for your event");
+        // let calendarApi = data.view.calendar;
 
-        let title = prompt("Please enter a new title for your event");
-        let calendarApi = data.view.calendar;
+        // calendarApi.unselect(); // clear date selection
 
-        calendarApi.unselect(); // clear date selection
-
-        if (title) {
-            calendarApi.addEvent({
-                id: 1,
-                title,
-                start: data.startStr,
-                end: data.endStr,
-                allDay: data.allDay
-            });
-        }
+        // if (title) {
+        //     calendarApi.addEvent({
+        //         id: 1,
+        //         title,
+        //         start: data.startStr,
+        //         end: data.endStr,
+        //         allDay: data.allDay
+        //     });
+        // }
     };
 
     const handleEventClick = (data) => {
@@ -249,7 +304,7 @@ export default function DemoFullCalendar() {
                         events={events}
                         headerToolbar={{
                             start: "addEventButton", // will normally be on the left. if RTL, will be on the right
-                            center: "prev,title,next", // will normally be on the right. if RTL, will be on the left
+                            center: "customprev,title,customnext", // will normally be on the right. if RTL, will be on the left
                             end: "dayEventButton monthEventButton",
                         }}
                         plugins={[
@@ -260,6 +315,7 @@ export default function DemoFullCalendar() {
                         ]}
                         initialView="dayGridMonth"
                         views={customViews}
+                    // datesSet={args => gotoMonth1(args)}
                     />
                 </StyleWrapper>
 

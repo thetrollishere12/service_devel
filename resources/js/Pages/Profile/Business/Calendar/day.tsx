@@ -20,7 +20,7 @@ export const StyleWrapper = styled.div`
 .fc-addEventButton-button.fc-button.fc-button-primary{
     background: #172153;
 }  
-.fc-next-button.fc-button.fc-button-primary,.fc-prev-button.fc-button.fc-button-primary{
+.fc-customnext-button.fc-button.fc-button-primary,.fc-customprev-button.fc-button.fc-button-primary{
     background: #ffffff00;
     border-color: aliceblue;
     color: black;
@@ -69,8 +69,8 @@ const customView = (props) => {
 };
 
 const customEventContent = (event) => {
-    console.log("customEvent", event);
-    console.log("customEventCurrentData", event.event.toPlainObject());
+    // console.log("customEvent", event);
+    // console.log("customEventCurrentData", event.event.toPlainObject());
     const plainEvent = event.event.toPlainObject();
     if (plainEvent.extendedProps && plainEvent.extendedProps.displayAsCustom) {
         return (
@@ -94,8 +94,9 @@ const customViewPlugin = createPlugin({ views: { custom: customView } });
 export default function DemoFullCalendar() {
     const calendarRef = useRef(null);
 
-    const { appointments } = usePage().props
+    var { appointments, day } = usePage().props
 
+    const [initDate, setInitDate] = useState(new Date(day));
 
     const startDate = new Date();
     const endDate = new Date();
@@ -121,9 +122,11 @@ export default function DemoFullCalendar() {
     useEffect(() => {
         //@ts-ignore
         const calendarApi = calendarRef?.current?.getApi();
+        calendarApi.gotoDate(day);
         const event = calendarApi.getEventById("a");
+
         // console.log(JSON.stringify(event));
-    });
+    }, []);
 
     const customViews = {
         timeGridFourDay: {
@@ -160,10 +163,53 @@ export default function DemoFullCalendar() {
     };
 
     const toMonth = () => {
-        form.get('/user/appointment/calendar', {
+        const calendarApi = calendarRef?.current?.getApi();
+        var to = customizeMonth(calendarApi?.getCurrentData().viewTitle);
+        form.get(`/user/appointment/month/${to}`, {
             onFinish: () => form.reset(),
         });
     };
+
+    const customizeMonth = (data: String) => {
+        let array = data.split(/,| /);
+        let month = { "January": "01", "February": "02", "March": "03", "April": "04", "May": "05", "June": "06", "July": "07", "August": "08", "September": "09", "October": "10", "November": "11", "December": "12" };
+        let res: String = "";
+        // if (parseInt(array[1]) < 10) array[1] = "0" + array[1];
+        res = array[3] + "-" + month[array[0]];
+        // console.log(res);
+        return res;
+    }
+
+    const customizeDay = (data: String) => {
+        let array = data.split(/,| /);
+        let month = { "January": "01", "February": "02", "March": "03", "April": "04", "May": "05", "June": "06", "July": "07", "August": "08", "September": "09", "October": "10", "November": "11", "December": "12" };
+        let res: String = "";
+        if (parseInt(array[1]) < 10) array[1] = "0" + array[1];
+        res = array[3] + "-" + month[array[0]] + "-" + array[1];
+        // console.log(res);
+        return res;
+    }
+
+    const prevDay = () => {
+        const calendarApi = calendarRef?.current?.getApi();
+        calendarApi.prev();
+        var to = customizeDay(calendarApi?.getCurrentData().viewTitle);
+        form.get(`/user/appointment/day/${to}`, {
+            onFinish: () => form.reset(),
+        });
+    };
+
+    const nextDay = () => {
+
+        const calendarApi = calendarRef?.current?.getApi();
+        calendarApi.next();
+        var to = customizeDay(calendarApi?.getCurrentData().viewTitle);
+        form.get(`/user/appointment/day/${to}`, {
+            onFinish: () => form.reset(),
+        });
+    };
+
+
 
     const selectTeam = () => {
 
@@ -185,6 +231,14 @@ export default function DemoFullCalendar() {
         monthEventButton: {
             text: "Month",
             click: toMonth
+        },
+        customprev: {
+            text: "<",
+            click: prevDay
+        },
+        customnext: {
+            text: ">",
+            click: nextDay
         }
     };
 
@@ -228,9 +282,13 @@ export default function DemoFullCalendar() {
 
     const dayClick = (data) => {
         //@ts-ignore
-        console.log(data);
+        // console.log(data);
         const calendarApi = calendarRef?.current?.getApi();
         calendarApi.gotoDate(data);
+        setInitDate(data);
+        form.get(`/user/appointment/day/${data.toISOString().split('T')[0]}`, {
+            onFinish: () => form.reset(),
+        });
     }
 
     return (
@@ -240,6 +298,7 @@ export default function DemoFullCalendar() {
                 <div className="row-span-2 col-span-2 pl-36 pt-36">
                     <Calendar
                         onClickDay={dayClick}
+                        value={initDate}
                     />
                 </div>
                 <div className="row-span-6 col-span-10 pr-16">
@@ -267,7 +326,7 @@ export default function DemoFullCalendar() {
                             customButtons={customButtons}
                             editable={canDragToMove}
                             selectable={canDragToCreate}
-                            select={selectCallback}
+                            // select={selectCallback}
                             slotDuration={{ hours: 0.25 }}
                             eventStartEditable={canDragToMove}
                             eventDurationEditable={canDragToMove}
@@ -277,7 +336,7 @@ export default function DemoFullCalendar() {
                             events={events}
                             headerToolbar={{
                                 start: "addEventButton selectTeamMember", // will normally be on the left. if RTL, will be on the right
-                                center: "prev,title,next", // will normally be on the right. if RTL, will be on the left
+                                center: "customprev,title,customnext", // will normally be on the right. if RTL, will be on the left
                                 end: "dayEventButton monthEventButton",
                             }}
                             plugins={[
