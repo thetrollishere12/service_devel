@@ -10,6 +10,7 @@ import AppLayout from '@/Layouts/AppLayout';
 import BusinessLeftNav from '@/CustomComponents/BusinessLeftNav';
 import styled from "@emotion/styled";
 import { useForm, usePage } from '@inertiajs/inertia-react';
+import moment from 'moment'
 
 export const StyleWrapper = styled.div`
 .fc-addEventButton-button.fc-button.fc-button-primary{
@@ -33,6 +34,15 @@ export const StyleWrapper = styled.div`
 }
 .fc-toolbar h2 {
   display: inline;
+}
+.fc-daygrid-event-harness {
+    display: none;
+}
+.fc-daygrid-event-harness:first-of-type {
+    display: block;
+}
+.fc-event-time{
+    display: none;
 }
 `
 
@@ -101,23 +111,33 @@ export default function DemoFullCalendar() {
     });
 
     var events: any[] = [];
+    var count: number[] = [];
 
     appointments.map((data, i) => {
+        var cnt = 0;
+        appointments.map((subdata, i) => {
+            let v1 = moment(data.start_date).format("YYYY-MM-DD");
+            let v2 = moment(subdata.start_date).format("YYYY-MM-DD");
+            if (v1 == v2) {
+                cnt++;
+            }
+        })
         events[i] = {
             start: data.start_date,
             end: data.end_date,
-            allday: false
+            allday: false,
+            title: "appointment : " + cnt
         }
     })
 
     //Get an event by its ID once the calendar has loaded
     useEffect(() => {
         //@ts-ignore
-        // const calendarApi = calendarRef?.current?.getApi();
+        const calendarApi = calendarRef?.current?.getApi();
         // const event = calendarApi.getEventById("a");
         // console.log(appointments);
         // calendarApi.gotoDate(month);
-    }, []);
+    });
 
     const customViews = {
         timeGridFourDay: {
