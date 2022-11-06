@@ -39,7 +39,7 @@ class AppointmentFactory extends Factory
             'store_id' => $this->faker->randomDigit(),
             'staff_id' => $this->faker->randomElement([1, 2, 3, 4]),
             'customer_id' => $this->faker->randomDigit(),
-            'name' => $this->faker->randomElement(['Thom','Jane','Winston','Conor']),
+            'name' => $this->faker->randomElement(['Thom','Jane','Winston','Conor','Wang','Chang','Wilter'])." ".ucfirst($this->faker->word()),
             'service' => $this->faker->randomElement(['Haircut','Trim','Lash','Wash']),
             'start_date' => $start_date,
             'end_date' => $end_date,
