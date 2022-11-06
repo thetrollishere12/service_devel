@@ -96,7 +96,10 @@ export default function DemoFullCalendar() {
 
     var { appointments, day } = usePage().props
 
-    const [initDate, setInitDate] = useState(new Date(day));
+    var now = new Date(day);
+    const offset = now.getTimezoneOffset()
+    now = new Date(now.getTime() + (offset * 60 * 1000));
+    const [initDate, setInitDate] = useState(new Date(now));
 
     const startDate = new Date();
     const endDate = new Date();
@@ -163,9 +166,9 @@ export default function DemoFullCalendar() {
     };
 
     const toMonth = () => {
-        const calendarApi = calendarRef?.current?.getApi();
-        var to = customizeMonth(calendarApi?.getCurrentData().viewTitle);
-        form.get(`/user/appointment/month/${to}`, {
+        // const calendarApi = calendarRef?.current?.getApi();
+        // var to = customizeMonth(calendarApi?.getCurrentData().viewTitle);
+        form.get(`/user/appointment/month/`, { //${to}
             onFinish: () => form.reset(),
         });
     };

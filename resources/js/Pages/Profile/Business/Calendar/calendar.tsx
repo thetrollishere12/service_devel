@@ -15,7 +15,7 @@ export const StyleWrapper = styled.div`
 .fc-addEventButton-button.fc-button.fc-button-primary{
     background: #172153;
 }  
-.fc-customnext-button.fc-button.fc-button-primary,.fc-customprev-button.fc-button.fc-button-primary{
+.fc-next-button.fc-button.fc-button-primary,.fc-prev-button.fc-button.fc-button-primary{
     background: #ffffff00;
     border-color: aliceblue;
     color: black;
@@ -87,7 +87,7 @@ const customViewPlugin = createPlugin({ views: { custom: customView } });
 export default function DemoFullCalendar() {
     const calendarRef = useRef(null);
 
-    const { appointments, month } = usePage().props
+    const { appointments } = usePage().props; //, month
     // console.log(month);
 
     const startDate = new Date();
@@ -113,10 +113,10 @@ export default function DemoFullCalendar() {
     //Get an event by its ID once the calendar has loaded
     useEffect(() => {
         //@ts-ignore
-        const calendarApi = calendarRef?.current?.getApi();
-        const event = calendarApi.getEventById("a");
+        // const calendarApi = calendarRef?.current?.getApi();
+        // const event = calendarApi.getEventById("a");
         // console.log(appointments);
-        calendarApi.gotoDate(month);
+        // calendarApi.gotoDate(month);
     }, []);
 
     const customViews = {
@@ -149,6 +149,8 @@ export default function DemoFullCalendar() {
 
     const toDay = () => {
         var now = new Date();
+        const offset = now.getTimezoneOffset()
+        now = new Date(now.getTime() - (offset * 60 * 1000));
         // console.log(now.toISOString().split('T')[0])
         form.get(`/user/appointment/day/${now.toISOString().split('T')[0]}`, {
             onFinish: () => form.reset(),
@@ -304,7 +306,7 @@ export default function DemoFullCalendar() {
                         events={events}
                         headerToolbar={{
                             start: "addEventButton", // will normally be on the left. if RTL, will be on the right
-                            center: "customprev,title,customnext", // will normally be on the right. if RTL, will be on the left
+                            center: "prev,title,next", // will normally be on the right. if RTL, will be on the left
                             end: "dayEventButton monthEventButton",
                         }}
                         plugins={[

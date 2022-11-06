@@ -29,10 +29,10 @@ class AppointmentController extends Controller
     }
 
     
-    public function calendar($month = null){
+    public function calendar(){ //$month = null
         $appointment = Appointment::all();
-        !$month && $month = "2022-11";
-        return Inertia::render('Profile/Business/Calendar/calendar', ['appointments' => $appointment, 'month' => $month]);
+        // !$month && $month = "2022-11";
+        return Inertia::render('Profile/Business/Calendar/calendar', ['appointments' => $appointment]); //, 'month' => $month
         
         // return Inertia::render('Profile/Business/Calendar/calendar');
     }
