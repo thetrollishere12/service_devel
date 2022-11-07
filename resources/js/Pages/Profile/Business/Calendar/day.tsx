@@ -13,6 +13,12 @@ import { useForm, usePage } from '@inertiajs/inertia-react';
 
 import Calendar from "react-calendar";
 import { makeStyles } from "@material-ui/core/styles";
+import {
+    Accordion,
+    AccordionHeader,
+    AccordionBody,
+    Checkbox
+} from "@material-tailwind/react";
 import "react-calendar/dist/Calendar.css";
 import { duration } from "moment";
 
@@ -294,15 +300,42 @@ export default function DemoFullCalendar() {
         });
     }
 
+    const [open1, setOpen1] = useState(true);
+    const [open2, setOpen2] = useState(true);
+    const [checkH, setCheckH] = useState(true);
+    const [checkT, setCheckT] = useState(true);
+    const [checkC, setCheckC] = useState(false);
+    const [checkU, setCheckU] = useState(true);
+
     return (
         <AppLayout title="day">
             <BusinessLeftNav />
-            <div className="grid grid-rows-2 grid-flow-col gap-4">
+            <div className="grid grid-rows-2 grid-flow-col gap-4" >
                 <div className="row-span-2 col-span-2 pl-36 pt-36">
                     <Calendar
                         onClickDay={dayClick}
                         value={initDate}
                     />
+                    <Accordion open={open1} style={{ maxWidth: "348px" }}>
+                        <AccordionHeader onClick={() => setOpen1(!open1)}>
+                            My Calendars
+                        </AccordionHeader>
+                        {/* <AccordionBody> */}
+                        <div className={`${!open1 && 'hidden'}`}>
+                            <Checkbox label="Home" onClick={() => setCheckH(!checkH)} className="text-orange-400" checked={checkH} /><br />
+                            <Checkbox label="Tasks" onClick={() => setCheckT(!checkT)} checked={checkT} />
+                        </div>
+                        {/* </AccordionBody> */}
+                    </Accordion>
+                    <Accordion open={open2} style={{ maxWidth: "348px" }}>
+                        <AccordionHeader onClick={() => setOpen2(!open2)}>
+                            Others Caledars
+                        </AccordionHeader>
+                        <div className={`${!open2 && 'hidden'}`}>
+                            <Checkbox label="Contacts" onClick={() => setCheckC(!checkC)} checked={checkC} /><br />
+                            <Checkbox label="Holiday in United States" onClick={() => setCheckU(!checkU)} className="text-gray-400" checked={checkU} />
+                        </div>
+                    </Accordion>
                 </div>
                 <div className="row-span-6 col-span-10 pr-16">
                     {<div style={{ visibility: "hidden" }}>
@@ -355,8 +388,8 @@ export default function DemoFullCalendar() {
 
 
                 </div>
-            </div>
-        </AppLayout>
+            </div >
+        </AppLayout >
 
     );
 };
