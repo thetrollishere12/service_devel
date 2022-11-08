@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
@@ -22,7 +23,11 @@ class AppointmentController extends Controller
     }
 
     public function day($day){
-        $appointment = Appointment::all();
+        // $appointment = Appointment::all();
+        $appointment = DB::table('appointments')
+            ->join('staff', 'appointments.staff_id', "=", "staff.id")
+            ->select('appointments.*',"staff.*")
+            ->get();
         // !$day && $day = "2022-11-05";
         return Inertia::render('Profile/Business/Calendar/day', ['appointments' => $appointment, 'day' => $day]);
         // return Inertia::render('Profile/Business/Calendar/day');
@@ -30,7 +35,11 @@ class AppointmentController extends Controller
 
     
     public function calendar(){ //$month = null
-        $appointment = Appointment::all();
+        // $appointment = Appointment::all();
+        $appointment = DB::table('appointments')
+            ->join('staff', 'appointments.staff_id', "=", "staff.id")
+            ->select('appointments.*',"staff.*")
+            ->get();
         // !$month && $month = "2022-11";
         return Inertia::render('Profile/Business/Calendar/calendar', ['appointments' => $appointment]); //, 'month' => $month
         

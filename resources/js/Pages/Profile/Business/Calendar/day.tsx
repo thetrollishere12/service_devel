@@ -47,6 +47,9 @@ export const StyleWrapper = styled.div`
 .fc-toolbar h2 {
   display: inline;
 }
+.fc-timegrid-event-harness.fc-timegrid-event-harness-inset{
+    width: 48%;
+}
 `
 
 const customView = (props) => {
@@ -123,7 +126,8 @@ export default function DemoFullCalendar() {
         events[i] = {
             start: data.start_date,
             end: data.end_date,
-            allday: false
+            allday: false,
+            title: data.name
         }
     })
 
