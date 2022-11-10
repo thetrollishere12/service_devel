@@ -21,6 +21,7 @@ import {
 } from "@material-tailwind/react";
 import "react-calendar/dist/Calendar.css";
 import { duration } from "moment";
+import { isNumber } from "lodash";
 
 export const StyleWrapper = styled.div`
 .fc-addEventButton-button.fc-button.fc-button-primary{
@@ -48,7 +49,30 @@ export const StyleWrapper = styled.div`
   display: inline;
 }
 .fc-timegrid-event-harness.fc-timegrid-event-harness-inset{
-    width: 48%;
+    width: ${props => props.staff_cnt && 100 / props.staff_cnt + "%"};
+}
+// .fc-timegrid-event-harness.fc-timegrid-event-harness-inset:nth-of-type(1){
+//     // inset: 200px 0% -250px 50%;
+//     position: absolute;
+//     top: 200px;
+//   right: 0;
+//   bottom: -250px;
+//   left: 50%;
+// }
+table{
+    width: -webkit-fill-available;
+}
+// .fc-header-toolbar.fc-toolbar {
+//     position: fixed;    
+//     display: grid;
+//     grid-template-columns: 1fr 1fr 1fr;
+// }
+.fc-toolbar-chunk {
+    display: flex;
+    justify-content: center;
+}
+.fc-view-harness.fc-view-harness-active{
+    margin-top: 50px;
 }
 `
 
@@ -109,6 +133,7 @@ export default function DemoFullCalendar() {
     const offset = now.getTimezoneOffset()
     now = new Date(now.getTime() + (offset * 60 * 1000));
     const [initDate, setInitDate] = useState(new Date(now));
+    const [avatargap, setAvatargap] = useState(0);
 
     const startDate = new Date();
     const endDate = new Date();
@@ -121,6 +146,10 @@ export default function DemoFullCalendar() {
     });
 
     var events: any[] = [];
+    var staffJson: {} = {};
+    var staff: any[] = [];
+    var staff_cnt = 0;
+    // var avatargap = 0;
 
     appointments.map((data, i) => {
         events[i] = {
@@ -129,7 +158,14 @@ export default function DemoFullCalendar() {
             allday: false,
             title: data.name
         }
+        staffJson[`${data.staff_id}`] = data;
     })
+
+
+    for (var sta in staffJson) {
+        staff[staff_cnt] = staffJson[`${sta}`];
+        staff_cnt++;
+    }
 
     //Get an event by its ID once the calendar has loaded
     useEffect(() => {
@@ -138,7 +174,39 @@ export default function DemoFullCalendar() {
         calendarApi.gotoDate(day);
         const event = calendarApi.getEventById("a");
 
-        // console.log(JSON.stringify(event));
+        var tablew = document.getElementsByClassName("fc-timegrid fc-timeGridDay-view fc-view");
+        if (staff.length > 8) {
+            tablew[0].style.width = `${staff.length * 12.5}%`;
+        }
+
+        var ava = document.getElementsByClassName("fc-col-header");
+        setAvatargap(ava[0]?.clientWidth / 4);
+
+        const newNode = document.createElement("div");
+        newNode.className = "grid";
+        newNode.style = `grid-template-columns: 1fr 1fr 1fr 1fr; width:${staff.length > 8 && staff.length * 12.5}%`;
+
+        // Create a text node:
+        staff.map(data => {
+            const node = document.createElement("div");
+            node.innerHTML = `<div class="grid flex-wrap justify-center"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." />${data.name} </div >`
+            newNode.appendChild(node);
+        })
+        const list = document.getElementsByClassName("fc fc-media-screen fc-direction-ltr fc-theme-standard");
+        list[0].insertBefore(newNode, list[0].children[1]);
+
+
+        const styleSheetContent = `
+            .fc-timegrid-event-harness.fc-timegrid-event-harness-inset{
+                width:${100 / staff.length}%;
+            }
+        `;
+
+        if (!document.querySelectorAll(".fc-timegrid-event-harness.fc-timegrid-event-harness-inset")) {
+            var head = document.head || document.getElementsByTagName("head")[0];
+            console.log(head);
+            head.appendChild(createStyleElement(id, content));
+        }
     }, []);
 
     const customViews = {
@@ -311,6 +379,46 @@ export default function DemoFullCalendar() {
     const [checkC, setCheckC] = useState(false);
     const [checkU, setCheckU] = useState(true);
 
+    const changePos = () => {
+        var evenw = document.querySelectorAll(".fc-timegrid-event-harness.fc-timegrid-event-harness-inset");
+        if (evenw.length != 0) {
+            for (var ins = 0; ins < evenw.length; ins++) {
+                staff.map((sta, index) => {
+                    if (evenw[ins].innerText.indexOf(sta.name) != -1) {
+
+                        // if (evenw[ins].style.getPropertyValue("inset") != "")
+                        // evenw[ins].style.setProperty('inset', evenw[ins].style?.inset.replace("0%", "" + 100 / staff.length * index + "%"));
+                        if (evenw[ins].style.inset != "") {
+                            var tmp = evenw[ins].style?.inset.replace("0%", "" + 100 / staff.length * index + "%");
+                            var inse = tmp.split(" ");
+                            var righ = "" + 100 / staff.length * index + "%";
+                            evenw[ins].style.inset = inse[0] + " " + righ + " " + inse[2];
+                        }
+                        // if (evenw[ins].style.inset != "")
+                        //     evenw[ins].style.right = "" + 100 / staff.length * index + "%";
+                        // const myStyles = `
+                        //     top: ${inse[0]};
+                        //     right: ${inse[1]};
+                        //     bottom: ${inse[2]};
+                        //     left: ${inse[3]};
+                        // `;
+                        // evenw[ins].style.cssText = myStyles;
+                    }
+                })
+            }
+            // for (var data in evenw) {
+            //     if (isNumber(parseInt(data))) {
+            //         staff.map((sta, index) => {
+            //             if (evenw[`${data}`].innerText?.indexOf(sta.name) != -1) {
+            //                 if (evenw[`${data}`].style)
+            //                     evenw[`${data}`].style.inset = evenw[`${data}`].style?.inset.replace("0%", "" + 100 / staff.length * index + "%");
+            //             }
+            //         })
+            //     }
+            // }
+        }
+    }
+
     return (
         <AppLayout title="day">
             <BusinessLeftNav />
@@ -361,8 +469,13 @@ export default function DemoFullCalendar() {
                             type="checkbox"
                         />
                     </div>}
-                    <StyleWrapper>
+
+                    <StyleWrapper
+                        staff_cnt={staff_cnt}
+                    >
+
                         <FullCalendar
+
                             customButtons={customButtons}
                             editable={canDragToMove}
                             selectable={canDragToCreate}
@@ -387,6 +500,7 @@ export default function DemoFullCalendar() {
                             ]}
                             initialView="timeGridDay"
                             views={customViews}
+                            eventDidMount={changePos}
                         />
                     </StyleWrapper>
 
