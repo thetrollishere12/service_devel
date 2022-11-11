@@ -48,9 +48,9 @@ export const StyleWrapper = styled.div`
 .fc-toolbar h2 {
   display: inline;
 }
-.fc-timegrid-event-harness.fc-timegrid-event-harness-inset{
-    width: ${props => props.staff_cnt && 100 / props.staff_cnt + "%"};
-}
+// .fc-timegrid-event-harness.fc-timegrid-event-harness-inset{
+//     width: ${props => props.staff_cnt && 100 / props.staff_cnt + "%"};
+// }
 // .fc-timegrid-event-harness.fc-timegrid-event-harness-inset:nth-of-type(1){
 //     // inset: 200px 0% -250px 50%;
 //     position: absolute;
@@ -179,8 +179,11 @@ export default function DemoFullCalendar() {
         const event = calendarApi.getEventById("a");
 
         var tablew = document.getElementsByClassName("fc-timegrid fc-timeGridDay-view fc-view");
+        tablew[0].style.overflowX = "auto";
+        tablew[0].style.overflowY = "hidden";
         if (staff.length > onepagecount) {
-            tablew[0].style.width = `${staff.length * 100 / onepagecount}%`;
+            tablew[0].firstElementChild.style.width = `${staff.length * 100 / onepagecount}%`;
+            // tablew[0].style.width = `${staff.length * 100 / onepagecount}%`;
         }
 
         var ava = document.getElementsByClassName("fc-col-header");
@@ -197,8 +200,8 @@ export default function DemoFullCalendar() {
             node.innerHTML = `<div class="grid flex-wrap justify-center"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." />${data.name} </div >`
             newNode.appendChild(node);
         })
-        const list = document.getElementsByClassName("fc fc-media-screen fc-direction-ltr fc-theme-standard");
-        list[0].insertBefore(newNode, list[0].children[1]);
+        const list = document.getElementsByClassName("fc-timegrid fc-timeGridDay-view fc-view");
+        list[0].insertBefore(newNode, list[0].children[0]);
 
 
         const styleSheetContent = `
