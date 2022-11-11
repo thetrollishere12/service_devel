@@ -134,6 +134,7 @@ export default function DemoFullCalendar() {
     now = new Date(now.getTime() + (offset * 60 * 1000));
     const [initDate, setInitDate] = useState(new Date(now));
     const [avatargap, setAvatargap] = useState(0);
+    const onepagecount = 4; //for multi staff const so if you want change the staff's width only change it
 
     const startDate = new Date();
     const endDate = new Date();
@@ -149,6 +150,8 @@ export default function DemoFullCalendar() {
     var staffJson: {} = {};
     var staff: any[] = [];
     var staff_cnt = 0;
+    var col_template = "";
+
     // var avatargap = 0;
 
     appointments.map((data, i) => {
@@ -165,6 +168,7 @@ export default function DemoFullCalendar() {
     for (var sta in staffJson) {
         staff[staff_cnt] = staffJson[`${sta}`];
         staff_cnt++;
+        col_template += "1fr "
     }
 
     //Get an event by its ID once the calendar has loaded
@@ -175,16 +179,17 @@ export default function DemoFullCalendar() {
         const event = calendarApi.getEventById("a");
 
         var tablew = document.getElementsByClassName("fc-timegrid fc-timeGridDay-view fc-view");
-        if (staff.length > 8) {
-            tablew[0].style.width = `${staff.length * 12.5}%`;
+        if (staff.length > onepagecount) {
+            tablew[0].style.width = `${staff.length * 100 / onepagecount}%`;
         }
 
         var ava = document.getElementsByClassName("fc-col-header");
         setAvatargap(ava[0]?.clientWidth / 4);
 
         const newNode = document.createElement("div");
+
         newNode.className = "grid";
-        newNode.style = `grid-template-columns: 1fr 1fr 1fr 1fr; width:${staff.length > 8 && staff.length * 12.5}%`;
+        newNode.style = `grid-template-columns: ${col_template}; width:${staff.length > onepagecount && staff.length * 100 / onepagecount}%`;
 
         // Create a text node:
         staff.map(data => {
