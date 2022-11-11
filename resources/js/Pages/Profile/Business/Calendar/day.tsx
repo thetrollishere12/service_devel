@@ -48,9 +48,9 @@ export const StyleWrapper = styled.div`
 .fc-toolbar h2 {
   display: inline;
 }
-// .fc-timegrid-event-harness.fc-timegrid-event-harness-inset{
-//     width: ${props => props.staff_cnt && 100 / props.staff_cnt + "%"};
-// }
+.fc-timegrid-event-harness.fc-timegrid-event-harness-inset{
+    width: ${props => props.staff_cnt && 100 / props.staff_cnt + "%"};
+}
 // .fc-timegrid-event-harness.fc-timegrid-event-harness-inset:nth-of-type(1){
 //     // inset: 200px 0% -250px 50%;
 //     position: absolute;
