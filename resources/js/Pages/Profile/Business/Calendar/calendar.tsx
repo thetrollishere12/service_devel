@@ -157,7 +157,7 @@ export default function DemoFullCalendar() {
         const calendarApi = calendarRef?.current?.getApi();
         // const event = calendarApi.getEventById("a");
         // console.log(appointments);
-        // calendarApi.gotoDate(month);
+        calendarApi.gotoDate(month);
     });
 
     const customViews = {
