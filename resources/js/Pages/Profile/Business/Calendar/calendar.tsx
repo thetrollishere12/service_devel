@@ -16,7 +16,7 @@ export const StyleWrapper = styled.div`
 .fc-addEventButton-button.fc-button.fc-button-primary{
     background: #172153;
 }  
-.fc-next-button.fc-button.fc-button-primary,.fc-prev-button.fc-button.fc-button-primary{
+.fc-customnext-button.fc-button.fc-button-primary,.fc-customprev-button.fc-button.fc-button-primary{
     background: #ffffff00;
     border-color: aliceblue;
     color: black;
@@ -31,6 +31,7 @@ export const StyleWrapper = styled.div`
 }
 .fc-dayEventButton-button.fc-button.fc-button-primary.fc-button-active,.fc-monthEventButton-button.fc-button.fc-button-primary{
     color: orange;
+    border-color: orange;
 }
 .fc-toolbar h2 {
   display: inline;
@@ -43,6 +44,26 @@ export const StyleWrapper = styled.div`
 }
 .fc-event-time{
     display: none;
+}
+.fc-daygrid-day-top{
+    flex-direction: inherit;
+}
+.fc-event-title{
+    color:#fea54c;
+}
+.fc-daygrid-day-frame.fc-scrollgrid-sync-inner{
+    position: relative;
+}
+.fc-daygrid-day-events{
+    position: absolute !important;
+    bottom: 10px;
+    left: 15px;
+}
+.fc-daygrid-event.fc-daygrid-dot-event.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end{
+    background-color: #937b6536;
+}
+.fc-daygrid-event-dot{
+    border: calc(var(--fc-daygrid-event-dot-width, 8px) / 2) solid #fea54c;
 }
 `
 
@@ -97,7 +118,7 @@ const customViewPlugin = createPlugin({ views: { custom: customView } });
 export default function DemoFullCalendar() {
     const calendarRef = useRef(null);
 
-    const { appointments } = usePage().props; //, month
+    const { appointments, month } = usePage().props; //, month
     // console.log(month);
 
     const startDate = new Date();
@@ -126,7 +147,7 @@ export default function DemoFullCalendar() {
             start: data.start_date,
             end: data.end_date,
             allday: false,
-            title: "appointment : " + cnt
+            title: "Appointment : " + cnt
         }
     })
 
@@ -326,7 +347,7 @@ export default function DemoFullCalendar() {
                         events={events}
                         headerToolbar={{
                             start: "addEventButton", // will normally be on the left. if RTL, will be on the right
-                            center: "prev,title,next", // will normally be on the right. if RTL, will be on the left
+                            center: "customprev,title,customnext", // will normally be on the right. if RTL, will be on the left
                             end: "dayEventButton monthEventButton",
                         }}
                         plugins={[

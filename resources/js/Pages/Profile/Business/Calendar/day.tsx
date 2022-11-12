@@ -44,6 +44,7 @@ export const StyleWrapper = styled.div`
 }
 .fc-dayEventButton-button.fc-button.fc-button-primary,.fc-monthEventButton-button.fc-button.fc-button-primary.fc-button-active{
     color: orange;
+    border-color: orange;
 }
 .fc-toolbar h2 {
   display: inline;
@@ -72,7 +73,20 @@ table{
     justify-content: center;
 }
 .fc-view-harness.fc-view-harness-active{
-    margin-top: 50px;
+    margin-top: 30px;
+}
+.fc-timegrid-event.fc-v-event.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-future{
+    border-left: 10px solid orange;
+    background-color: white;
+}
+.fc-timegrid-event.fc-v-event.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-past{
+    border-left: 10px solid gray;
+    background-color: gray;
+}
+.fc-v-event {
+    border: 1px solid #fbfbfb;
+    // background-color: white;
+    color: black;
 }
 `
 
@@ -191,13 +205,13 @@ export default function DemoFullCalendar() {
 
         const newNode = document.createElement("div");
 
-        newNode.className = "grid";
+        newNode.className = "grid pb-4 pl-4";
         newNode.style = `grid-template-columns: ${col_template}; width:${staff.length > onepagecount && staff.length * 100 / onepagecount}%`;
 
         // Create a text node:
         staff.map(data => {
             const node = document.createElement("div");
-            node.innerHTML = `<div class="grid flex-wrap justify-center"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." />${data.name} </div >`
+            node.innerHTML = `<div class="flex flex-wrap justify-center"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." /><div class="pl-4">${data.name}<br/>64hr</div> </div >`
             newNode.appendChild(node);
         })
         const list = document.getElementsByClassName("fc-timegrid fc-timeGridDay-view fc-view");
@@ -435,6 +449,7 @@ export default function DemoFullCalendar() {
                     <Calendar
                         onClickDay={dayClick}
                         value={initDate}
+                        calendarType='US'
                     />
                     <Accordion open={open1} style={{ maxWidth: "348px" }}>
                         <AccordionHeader onClick={() => setOpen1(!open1)}>
