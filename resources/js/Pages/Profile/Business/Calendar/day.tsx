@@ -75,18 +75,24 @@ table{
 .fc-view-harness.fc-view-harness-active{
     margin-top: 30px;
 }
-.fc-timegrid-event.fc-v-event.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-future{
+.fc-timegrid-event.fc-v-event.fc-event.fc-event-start.fc-event-end.fc-event-future{
     border-left: 10px solid orange;
     background-color: white;
 }
-.fc-timegrid-event.fc-v-event.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-past{
+.fc-timegrid-event.fc-v-event.fc-event.fc-event-start.fc-event-end.fc-event-past{
     border-left: 10px solid gray;
-    background-color: gray;
+    background-color: 	#F0F0F0;
 }
 .fc-v-event {
     border: 1px solid #fbfbfb;
     // background-color: white;
     color: black;
+}
+.fc-event-main {
+	color: black;
+}
+.fc-scrollgrid-section.fc-scrollgrid-section-body:first-of-type{
+	display : none;
 }
 `
 
@@ -345,12 +351,12 @@ export default function DemoFullCalendar() {
         }
     };
 
-    const [canDragToMove, setCanDragToMove] = useState<boolean>(true);
+    const [canDragToMove, setCanDragToMove] = useState<boolean>(false);
     const handleCanDragToMove = () => {
         setCanDragToMove(!canDragToMove);
     };
 
-    const [canDragToCreate, setCanDragToCreate] = useState<boolean>(true);
+    const [canDragToCreate, setCanDragToCreate] = useState<boolean>(false);
     const handleCanDragToCreate = () => {
         setCanDragToCreate(!canDragToCreate);
     };
@@ -403,6 +409,11 @@ export default function DemoFullCalendar() {
 
     const changePos = () => {
         var evenw = document.querySelectorAll(".fc-timegrid-event-harness.fc-timegrid-event-harness-inset");
+		var isdayornight = document.querySelectorAll(".fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion");
+		var reactcalendar = document.querySelectorAll(".react-calendar");
+		
+		reactcalendar[0].style.border = "none";
+		
         if (evenw.length != 0) {
             for (var ins = 0; ins < evenw.length; ins++) {
                 staff.map((sta, index) => {
@@ -439,6 +450,27 @@ export default function DemoFullCalendar() {
             //     }
             // }
         }
+		if(isdayornight.length != 0){
+			for(var inss = 0;inss < isdayornight.length; inss++){
+				if(isdayornight[inss].innerText.indexOf('am') != -1){
+					let tm = isdayornight[inss].innerText;
+					tm = tm.replace("am","");
+					if(parseInt(tm) < 10){
+						isdayornight[inss].innerText = "0"+tm+" AM";
+					}else{
+						isdayornight[inss].innerText = tm+" AM";
+					}
+				}else if(isdayornight[inss].innerText.indexOf('pm') != -1){
+					let tm = isdayornight[inss].innerText;
+					tm = tm.replace("pm","");
+					if(parseInt(tm) < 10){
+						isdayornight[inss].innerText = "0"+tm+" PM";
+					}else{
+						isdayornight[inss].innerText = tm+" PM";
+					}
+				}
+			}
+		}
     }
 
     return (
@@ -503,7 +535,7 @@ export default function DemoFullCalendar() {
                             editable={canDragToMove}
                             selectable={canDragToCreate}
                             // select={selectCallback}
-                            slotDuration={{ hours: 0.25 }}
+                            slotDuration={{ hours: 0.5 }}
                             eventStartEditable={canDragToMove}
                             eventDurationEditable={canDragToMove}
                             ref={calendarRef}
