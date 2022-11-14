@@ -94,6 +94,9 @@ table{
 .fc-scrollgrid-section.fc-scrollgrid-section-body:first-of-type{
 	display : none;
 }
+tr{
+	height: 80px;
+}
 `
 
 const customView = (props) => {
@@ -456,7 +459,7 @@ export default function DemoFullCalendar() {
 					let tm = isdayornight[inss].innerText;
 					tm = tm.replace("am","");
 					if(parseInt(tm) < 10){
-						isdayornight[inss].innerText = "0"+tm+" AM";
+						isdayornight[inss].innerText = tm+" AM";//"0"+
 					}else{
 						isdayornight[inss].innerText = tm+" AM";
 					}
@@ -464,7 +467,7 @@ export default function DemoFullCalendar() {
 					let tm = isdayornight[inss].innerText;
 					tm = tm.replace("pm","");
 					if(parseInt(tm) < 10){
-						isdayornight[inss].innerText = "0"+tm+" PM";
+						isdayornight[inss].innerText = tm+" PM";//"0"+
 					}else{
 						isdayornight[inss].innerText = tm+" PM";
 					}
@@ -535,7 +538,7 @@ export default function DemoFullCalendar() {
                             editable={canDragToMove}
                             selectable={canDragToCreate}
                             // select={selectCallback}
-                            slotDuration={{ hours: 0.5 }}
+                            slotDuration={{ hours: 1 }}
                             eventStartEditable={canDragToMove}
                             eventDurationEditable={canDragToMove}
                             ref={calendarRef}
