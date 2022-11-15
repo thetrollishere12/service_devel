@@ -22,6 +22,13 @@ import {
 import "react-calendar/dist/Calendar.css";
 import { duration } from "moment";
 import { isNumber } from "lodash";
+export const SmallStyleWrapper = styled.div`
+.react-calendar__tile--active {
+    background: #ffa500;
+    color: white;
+    border-radius: 999999px;
+}
+`
 
 export const StyleWrapper = styled.div`
 .fc-addEventButton-button.fc-button.fc-button-primary{
@@ -96,6 +103,10 @@ table{
 }
 tr{
 	height: 80px;
+}
+.fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion{
+    position: relative;
+    top: -30px;
 }
 `
 
@@ -411,12 +422,21 @@ export default function DemoFullCalendar() {
     const [checkU, setCheckU] = useState(true);
 
     const changePos = () => {
+        const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
         var evenw = document.querySelectorAll(".fc-timegrid-event-harness.fc-timegrid-event-harness-inset");
-		var isdayornight = document.querySelectorAll(".fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion");
-		var reactcalendar = document.querySelectorAll(".react-calendar");
-		
-		reactcalendar[0].style.border = "none";
-		
+        var isdayornight = document.querySelectorAll(".fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion");
+        var reactcalendar = document.querySelectorAll(".react-calendar");
+        var reactcalendarnavi = document.querySelectorAll(".react-calendar__navigation");
+        reactcalendarnavi[0].innerHTML = month[now.getMonth()];
+        reactcalendarnavi[0].style.fontWeight = "bold";
+        reactcalendarnavi[0].style.fontSize = "larger";
+        reactcalendarnavi[0].style.alignItems = "center";
+        reactcalendarnavi[0].style.paddingLeft = "15px";
+
+        reactcalendar[0].style.border = "none";
+        reactcalendar[0].style.background = "#f3f4f6";
+
         if (evenw.length != 0) {
             for (var ins = 0; ins < evenw.length; ins++) {
                 staff.map((sta, index) => {
@@ -453,27 +473,29 @@ export default function DemoFullCalendar() {
             //     }
             // }
         }
-		if(isdayornight.length != 0){
-			for(var inss = 0;inss < isdayornight.length; inss++){
-				if(isdayornight[inss].innerText.indexOf('am') != -1){
-					let tm = isdayornight[inss].innerText;
-					tm = tm.replace("am","");
-					if(parseInt(tm) < 10){
-						isdayornight[inss].innerText = tm+" AM";//"0"+
-					}else{
-						isdayornight[inss].innerText = tm+" AM";
-					}
-				}else if(isdayornight[inss].innerText.indexOf('pm') != -1){
-					let tm = isdayornight[inss].innerText;
-					tm = tm.replace("pm","");
-					if(parseInt(tm) < 10){
-						isdayornight[inss].innerText = tm+" PM";//"0"+
-					}else{
-						isdayornight[inss].innerText = tm+" PM";
-					}
-				}
-			}
-		}
+        if (isdayornight.length != 0) {
+            for (var inss = 0; inss < isdayornight.length; inss++) {
+                isdayornight[inss].innerText = isdayornight[inss].innerText.replace("am", " AM");
+                isdayornight[inss].innerText = isdayornight[inss].innerText.replace("pm", " PM");
+                // if (isdayornight[inss].innerText.indexOf('am') != -1) {
+                //     let tm = isdayornight[inss].innerText;
+                //     tm = tm.replace("am", "");
+                //     if (parseInt(tm) < 10) {
+                //         isdayornight[inss].innerText = tm + " AM";//"0"+
+                //     } else {
+                //         isdayornight[inss].innerText = tm + " AM";
+                //     }
+                // } else if (isdayornight[inss].innerText.indexOf('pm') != -1) {
+                //     let tm = isdayornight[inss].innerText;
+                //     tm = tm.replace("pm", "");
+                //     if (parseInt(tm) < 10) {
+                //         isdayornight[inss].innerText = tm + " PM";//"0"+
+                //     } else {
+                //         isdayornight[inss].innerText = tm + " PM";
+                //     }
+                // }
+            }
+        }
     }
 
     return (
@@ -481,11 +503,13 @@ export default function DemoFullCalendar() {
             <BusinessLeftNav />
             <div className="grid grid-rows-2 grid-flow-col gap-4" >
                 <div className="row-span-2 col-span-2 pl-36 pt-36">
-                    <Calendar
-                        onClickDay={dayClick}
-                        value={initDate}
-                        calendarType='US'
-                    />
+                    <SmallStyleWrapper>
+                        <Calendar
+                            onClickDay={dayClick}
+                            value={initDate}
+                            calendarType='US'
+                        />
+                    </SmallStyleWrapper>
                     <Accordion open={open1} style={{ maxWidth: "348px" }}>
                         <AccordionHeader onClick={() => setOpen1(!open1)}>
                             My Calendars
@@ -558,7 +582,8 @@ export default function DemoFullCalendar() {
                             ]}
                             initialView="timeGridDay"
                             views={customViews}
-                            eventDidMount={changePos}
+                            // componentDidMount={changePos}
+                            viewDidMount={changePos}
                         />
                     </StyleWrapper>
 
