@@ -106,7 +106,9 @@ tr{
 }
 .fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion{
     position: relative;
-    top: -30px;
+    top: -40px;
+    background-color: #f3f4f6;
+    width: 58px;
 }
 `
 
