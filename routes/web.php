@@ -94,7 +94,7 @@ Route::get('/b/{id}',function(){
     });
 
     Route::get('user/appointment/day/{day}', [AppointmentController::class, 'day']);
-    
+
     Route::get('user/appointment/month/', function() {
         $date = date('Y-m');
         return redirect('user/appointment/month/'.$date);
@@ -102,3 +102,7 @@ Route::get('/b/{id}',function(){
     Route::get('user/appointment/month/{month}', [AppointmentController::class, 'calendar']);
     // Route::get('user/appointment/month', [AppointmentController::class, 'calendar']);
 
+
+
+Route::post('/services',[\App\Http\Controllers\ServiceController::class,'store']);
+Route::get('/services',[\App\Http\Controllers\ServiceController::class,'get']);

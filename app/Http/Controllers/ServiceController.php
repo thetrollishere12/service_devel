@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,6 +18,11 @@ class ServiceController extends Controller
         return Inertia::render('Profile/Business/Service/Index');
     }
 
+
+    public function get(){
+        return Service::all();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -24,7 +30,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -35,7 +41,25 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'name'=>'required',
+            'price'=>'required',
+            'hours'=>'required',
+            'minutes'=>'required',
+            'priceType'=>'required'
+        ]);
+
+        $d=new Service();
+        $d->name=$request->name;
+        $d->price=$request->price;
+        $d->hours=$request->hours;
+        $d->minutes=$request->minutes;
+        $d->price_type=$request->priceType;
+        $d->save();
+        return $d;
+
+
+
     }
 
     /**
