@@ -71,6 +71,8 @@ Route::get('/b/{id}',function(){
 
     Route::match(['get','post'],'user/business/workplace','BusinessSetupController@workplace')->name('profile.business.workplace');
 
+    Route::match(['get','post'],'user/business/service','BusinessSetupController@service')->name('profile.business.service');
+
     Route::get('business/dashboard','BusinessController@index');
 
     Route::resource('business/category', 'CategoryController');
