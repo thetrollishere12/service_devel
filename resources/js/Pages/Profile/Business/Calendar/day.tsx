@@ -28,6 +28,9 @@ export const SmallStyleWrapper = styled.div`
     color: white;
     border-radius: 999999px;
 }
+.react-calendar__tile.react-calendar__month-view__days__day{
+    font-size: 15px;
+}
 `
 
 export const StyleWrapper = styled.div`
@@ -70,6 +73,10 @@ export const StyleWrapper = styled.div`
 table{
     width: -webkit-fill-available;
 }
+.fc-timegrid-slots table{
+    margin-top: 10px;
+    margin-bottom: 80px;
+}
 // .fc-header-toolbar.fc-toolbar {
 //     position: fixed;    
 //     display: grid;
@@ -85,10 +92,14 @@ table{
 .fc-timegrid-event.fc-v-event.fc-event.fc-event-start.fc-event-end.fc-event-future{
     border-left: 10px solid orange;
     background-color: white;
+    box-shadow: 2px 2px 2px 2px #c9ccd1;
+    margin-left: 15px;
 }
 .fc-timegrid-event.fc-v-event.fc-event.fc-event-start.fc-event-end.fc-event-past{
     border-left: 10px solid gray;
-    background-color: 	#F0F0F0;
+    background-color:   #F0F0F0;
+    box-shadow: 2px 2px 2px 2px #c9ccd1;
+    margin-left: 15px;
 }
 .fc-v-event {
     border: 1px solid #fbfbfb;
@@ -96,19 +107,26 @@ table{
     color: black;
 }
 .fc-event-main {
-	color: black;
+    color: black;
 }
 .fc-scrollgrid-section.fc-scrollgrid-section-body:first-of-type{
-	display : none;
+    display : none;
 }
 tr{
-	height: 80px;
+    height: 80px;
 }
 .fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion{
     position: relative;
     top: -40px;
     background-color: #f3f4f6;
     width: 58px;
+    font-size: small;
+}
+.fc-scrollgrid-section.fc-scrollgrid-section-header{
+    display: none;
+}
+.fc-scrollgrid-section.fc-scrollgrid-section-header{
+    display: none;
 }
 `
 
@@ -251,6 +269,8 @@ export default function DemoFullCalendar() {
             console.log(head);
             head.appendChild(createStyleElement(id, content));
         }
+
+
     }, []);
 
     const customViews = {
@@ -259,6 +279,12 @@ export default function DemoFullCalendar() {
             duration: { days: 2 },
             buttonText: "4 day",
             eventContent: { customEventContent }
+        },
+        titleFormat: { // will produce something like "Tuesday, September 18, 2018"
+            month: 'short',
+            year: 'numeric',
+            day: '2-digit',
+            weekday: 'short'
         }
     };
 
@@ -307,10 +333,10 @@ export default function DemoFullCalendar() {
 
     const customizeDay = (data: String) => {
         let array = data.split(/,| /);
-        let month = { "January": "01", "February": "02", "March": "03", "April": "04", "May": "05", "June": "06", "July": "07", "August": "08", "September": "09", "October": "10", "November": "11", "December": "12" };
+        let month = { "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06", "Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12" };
         let res: String = "";
-        if (parseInt(array[1]) < 10) array[1] = "0" + array[1];
-        res = array[3] + "-" + month[array[0]] + "-" + array[1];
+        if (parseInt(array[3]) < 10) array[3] = "0" + array[3];
+        res = array[5] + "-" + month[array[2]] + "-" + array[3];
         // console.log(res);
         return res;
     }
@@ -424,16 +450,28 @@ export default function DemoFullCalendar() {
     const [checkU, setCheckU] = useState(true);
 
     const changePos = () => {
+        console.error("here------------");
         const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const month1 = ["Jan", "Febr", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
         var evenw = document.querySelectorAll(".fc-timegrid-event-harness.fc-timegrid-event-harness-inset");
         var isdayornight = document.querySelectorAll(".fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion");
         var reactcalendar = document.querySelectorAll(".react-calendar");
         var reactcalendarnavi = document.querySelectorAll(".react-calendar__navigation");
+        var abbr = document.querySelectorAll(".react-calendar__month-view__weekdays__weekday");
+
+        if (abbr.length != 0) {
+            for (var ia = 0; ia < abbr.length; ia++) {
+                abbr[ia].firstElementChild.style.textDecorationLine = "none";
+            }
+        }
+
         reactcalendarnavi[0].innerHTML = month[now.getMonth()];
         reactcalendarnavi[0].style.fontWeight = "bold";
         reactcalendarnavi[0].style.fontSize = "larger";
         reactcalendarnavi[0].style.alignItems = "center";
+        reactcalendarnavi[0].style.justifyContent = "center";
         reactcalendarnavi[0].style.paddingLeft = "15px";
 
         reactcalendar[0].style.border = "none";
@@ -498,6 +536,8 @@ export default function DemoFullCalendar() {
                 // }
             }
         }
+
+        // title[0].innerHTML = weekday[now.getDay()] + ", " + now.getDate() + ", " + month1[now.getMonth()] + " " + now.getFullYear();
     }
 
     return (
@@ -557,9 +597,7 @@ export default function DemoFullCalendar() {
                     <StyleWrapper
                         staff_cnt={staff_cnt}
                     >
-
                         <FullCalendar
-
                             customButtons={customButtons}
                             editable={canDragToMove}
                             selectable={canDragToCreate}
@@ -583,7 +621,12 @@ export default function DemoFullCalendar() {
                                 interactionPlugin
                             ]}
                             initialView="timeGridDay"
-                            views={customViews}
+                            titleFormat={{
+                                weekday: "short",
+                                month: "short",
+                                year: "numeric",
+                                day: "numeric"
+                            }}
                             // componentDidMount={changePos}
                             viewDidMount={changePos}
                         />
