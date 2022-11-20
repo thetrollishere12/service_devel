@@ -92,10 +92,14 @@ table{
 .fc-timegrid-event.fc-v-event.fc-event.fc-event-start.fc-event-end.fc-event-future{
     border-left: 10px solid orange;
     background-color: white;
+    box-shadow: 2px 2px 2px 2px #c9ccd1;
+    margin-left: 15px;
 }
 .fc-timegrid-event.fc-v-event.fc-event.fc-event-start.fc-event-end.fc-event-past{
     border-left: 10px solid gray;
     background-color: 	#F0F0F0;
+    box-shadow: 2px 2px 2px 2px #c9ccd1;
+    margin-left: 15px;
 }
 .fc-v-event {
     border: 1px solid #fbfbfb;
@@ -116,11 +120,11 @@ tr{
     top: -40px;
     background-color: #f3f4f6;
     width: 58px;
+    font-size: small;
 }
 .fc-scrollgrid-section.fc-scrollgrid-section-header{
 	display: none;
 }
-
 `
 
 const customView = (props) => {
@@ -326,10 +330,10 @@ export default function DemoFullCalendar() {
 
     const customizeDay = (data: String) => {
         let array = data.split(/,| /);
-        let month = { "January": "01", "February": "02", "March": "03", "April": "04", "May": "05", "June": "06", "July": "07", "August": "08", "September": "09", "October": "10", "November": "11", "December": "12" };
+        let month = { "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06", "Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12" };
         let res: String = "";
-        if (parseInt(array[1]) < 10) array[1] = "0" + array[1];
-        res = array[3] + "-" + month[array[0]] + "-" + array[1];
+        if (parseInt(array[3]) < 10) array[3] = "0" + array[3];
+        res = array[5] + "-" + month[array[2]] + "-" + array[3];
         // console.log(res);
         return res;
     }
@@ -464,6 +468,7 @@ export default function DemoFullCalendar() {
         reactcalendarnavi[0].style.fontWeight = "bold";
         reactcalendarnavi[0].style.fontSize = "larger";
         reactcalendarnavi[0].style.alignItems = "center";
+        reactcalendarnavi[0].style.justifyContent = "center";
         reactcalendarnavi[0].style.paddingLeft = "15px";
 
         reactcalendar[0].style.border = "none";
