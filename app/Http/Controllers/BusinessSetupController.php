@@ -48,5 +48,8 @@ class BusinessSetupController extends Controller
         return Inertia::render('Profile/Business/Screener/5');
     }
 
-    
+    public function service(Request $request){
+        return Inertia::render('Profile/Business/Screener/6');
+    }
+
 }

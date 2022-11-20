@@ -7,7 +7,10 @@ import { createInertiaApp } from '@inertiajs/inertia-react';
 import { InertiaProgress } from '@inertiajs/progress';
 import { RouteContext } from '@/Hooks/useRoute';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import {QueryClientProvider,QueryClient} from 'react-query'
 
+
+const client=new QueryClient()
 const appName =
   window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -20,9 +23,11 @@ createInertiaApp({
     ),
   setup({ el, App, props }) {
     return render(
-      <RouteContext.Provider value={(window as any).route}>
-        <App {...props} />
-      </RouteContext.Provider>,
+        <QueryClientProvider client={client}>
+            <RouteContext.Provider value={(window as any).route}>
+                <App {...props} />
+            </RouteContext.Provider>
+        </QueryClientProvider>,
       el,
     );
   },
