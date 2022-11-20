@@ -107,13 +107,13 @@ table{
     color: black;
 }
 .fc-event-main {
-	color: black;
+    color: black;
 }
 .fc-scrollgrid-section.fc-scrollgrid-section-body:first-of-type{
-	display : none;
+    display : none;
 }
 tr{
-	height: 80px;
+    height: 80px;
 }
 .fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion{
     position: relative;
@@ -124,6 +124,9 @@ tr{
 }
 .fc-scrollgrid-section.fc-scrollgrid-section-header{
 	display: none;
+}
+.fc-scrollgrid-section.fc-scrollgrid-section-header{
+    display: none;
 }
 `
 
