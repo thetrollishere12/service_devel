@@ -31,6 +31,12 @@ export const SmallStyleWrapper = styled.div`
 .react-calendar__tile.react-calendar__month-view__days__day{
     font-size: 15px;
 }
+.react-calendar__month-view__days__day--weekend {
+    color: orange;
+}
+.react-calendar__tile--active{
+    color: white !important;
+}
 `
 
 export const StyleWrapper = styled.div`
@@ -99,7 +105,7 @@ table{
     border-left: 10px solid gray;
     background-color: 	#F0F0F0;
     box-shadow: 2px 2px 2px 2px #c9ccd1;
-    margin-left: 15px;
+    // margin-left: 15px;
 }
 .fc-v-event {
     border: 1px solid #fbfbfb;
@@ -127,6 +133,15 @@ tr{
 }
 .fc-scrollgrid-section.fc-scrollgrid-section-header{
     display: none;
+}
+.fc-timegrid-divider.fc-cell-shaded{
+    display: none;
+}
+.forceline::after{
+    position: absolute;
+    width: 1px;
+    height: 100vh;
+    backgourd-color: black;
 }
 `
 
@@ -251,7 +266,7 @@ export default function DemoFullCalendar() {
         // Create a text node:
         staff.map(data => {
             const node = document.createElement("div");
-            node.innerHTML = `<div class="flex flex-wrap justify-center"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." /><div class="pl-4">${data.name}<br/>64hr</div> </div >`
+            node.innerHTML = `<div class="flex flex-wrap justify-end forceline"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." /><div class="pl-4 flex justify-end">${data.name}<br/>64hr<div style="width:1px; position: absolute; height: 1000vh; background-color: #dddddd; top: 80px;"></div></div></div >`
             newNode.appendChild(node);
         })
         const list = document.getElementsByClassName("fc-timegrid fc-timeGridDay-view fc-view");
@@ -467,12 +482,12 @@ export default function DemoFullCalendar() {
             }
         }
 
-        reactcalendarnavi[0].innerHTML = month[now.getMonth()];
-        reactcalendarnavi[0].style.fontWeight = "bold";
-        reactcalendarnavi[0].style.fontSize = "larger";
-        reactcalendarnavi[0].style.alignItems = "center";
-        reactcalendarnavi[0].style.justifyContent = "center";
-        reactcalendarnavi[0].style.paddingLeft = "15px";
+        // reactcalendarnavi[0].innerHTML = month[now.getMonth()];
+        // reactcalendarnavi[0].style.fontWeight = "bold";
+        // reactcalendarnavi[0].style.fontSize = "larger";
+        // reactcalendarnavi[0].style.alignItems = "center";
+        // reactcalendarnavi[0].style.justifyContent = "center";
+        // reactcalendarnavi[0].style.paddingLeft = "15px";
 
         reactcalendar[0].style.border = "none";
         reactcalendar[0].style.background = "#f3f4f6";
