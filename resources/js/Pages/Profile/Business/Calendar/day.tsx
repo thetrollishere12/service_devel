@@ -131,9 +131,6 @@ tr{
 .fc-scrollgrid-section.fc-scrollgrid-section-header{
 	display: none;
 }
-.fc-scrollgrid-section.fc-scrollgrid-section-header{
-    display: none;
-}
 .fc-timegrid-divider.fc-cell-shaded{
     display: none;
 }
@@ -285,6 +282,11 @@ export default function DemoFullCalendar() {
             head.appendChild(createStyleElement(id, content));
         }
 
+		const newTr = document.createElement('tr');
+		newTr.style = "height: 0px";
+		
+		const trlist = document.getElementsByClassName("fc-timegrid-slots");
+		trlist[0].firstElementChild.lastElementChild.insertBefore(newTr, trlist[0].firstElementChild.lastElementChild.children[0]);
 
     }, []);
 
