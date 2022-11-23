@@ -263,7 +263,7 @@ export default function DemoFullCalendar() {
         // Create a text node:
         staff.map(data => {
             const node = document.createElement("div");
-            node.innerHTML = `<div class="flex flex-wrap justify-end forceline"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." /><div class="pl-4 flex justify-end">${data.name}<br/>64hr<div style="width:1px; position: absolute; height: 1000vh; background-color: #dddddd; top: 80px;"></div></div></div >`
+            node.innerHTML = `<div class="flex flex-wrap justify-end forceline items-center"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." /><div class="pl-4 flex justify-end">${data.name}<br/>64hr<div style="width:1px; position: absolute; height: 1000vh; background-color: #dddddd; top: 80px;"></div><div style="width:1px; position: absolute; height: 1000vh; background-color: #dddddd; top: 80px; right: 0px;"></div></div></div >`
             newNode.appendChild(node);
         })
         const list = document.getElementsByClassName("fc-timegrid fc-timeGridDay-view fc-view");
