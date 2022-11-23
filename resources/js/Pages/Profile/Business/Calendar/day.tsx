@@ -144,6 +144,8 @@ tr{
 
 const customView = (props) => {
     let segs = sliceEvents(props, true);
+    // console.log("segs", segs);
+    // console.log("props", props);
     let key = 0;
     return (
         <div>
