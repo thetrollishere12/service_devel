@@ -144,8 +144,6 @@ tr{
 
 const customView = (props) => {
     let segs = sliceEvents(props, true);
-    // console.log("segs", segs);
-    // console.log("props", props);
     let key = 0;
     return (
         <div>
@@ -168,8 +166,6 @@ const customView = (props) => {
 };
 
 const customEventContent = (event) => {
-    // console.log("customEvent", event);
-    // console.log("customEventCurrentData", event.event.toPlainObject());
     const plainEvent = event.event.toPlainObject();
     if (plainEvent.extendedProps && plainEvent.extendedProps.displayAsCustom) {
         return (
@@ -354,7 +350,6 @@ export default function DemoFullCalendar() {
         let res: String = "";
         if (parseInt(array[3]) < 10) array[3] = "0" + array[3];
         res = array[5] + "-" + month[array[2]] + "-" + array[3];
-        // console.log(res);
         return res;
     }
 
