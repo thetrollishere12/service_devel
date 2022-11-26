@@ -257,9 +257,13 @@ export default function DemoFullCalendar() {
         newNode.style = `grid-template-columns: ${col_template}; width:${staff.length > onepagecount && staff.length * 100 / onepagecount}%`;
 
         // Create a text node:
-        staff.map(data => {
+        staff.map((data, index) => {
             const node = document.createElement("div");
-            node.innerHTML = `<div class="flex justify-end forceline items-center"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." /><div class="pl-4 flex justify-end">${data.name}<br/>64hr<div style="width:1px; position: absolute; height: 1000vh; background-color: #dddddd; top: 90px;"></div><div style="width:1px; position: absolute; height: 1000vh; background-color: #dddddd; top: 90px; right: 0px;"></div></div></div >`
+            if (index == 0) {
+                node.innerHTML = `<div style="width:1px; position: absolute; height: 1000vh; background-color: #dddddd; top: 90px; right: 0px;"></div><div class="flex justify-center forceline items-center"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." /><div class="pl-4 flex justify-end">${data.name}<br/>64hr</div></div >`
+            } else {
+                node.innerHTML = `<div style="width:1px; position: absolute; height: 1000vh; background-color: #dddddd; top: 90px;"></div><div style="width:1px; position: absolute; height: 1000vh; background-color: #dddddd; top: 90px; right: 0px;"></div><div class="flex justify-center forceline items-center"><img src = "https://mdbootstrap.com/img/new/standard/city/041.jpg" class = "w-16 h-16 bg-white border max-w-sm rounded-full" alt = "..." /><div class="pl-4 flex justify-end">${data.name}<br/>64hr</div></div >`
+            }
             newNode.appendChild(node);
         })
         const list = document.getElementsByClassName("fc-timegrid fc-timeGridDay-view fc-view");
@@ -278,11 +282,11 @@ export default function DemoFullCalendar() {
             head.appendChild(createStyleElement(id, content));
         }
 
-		const newTr = document.createElement('tr');
-		newTr.style = "height: 0px";
-		
-		const trlist = document.getElementsByClassName("fc-timegrid-slots");
-		trlist[0].firstElementChild.lastElementChild.insertBefore(newTr, trlist[0].firstElementChild.lastElementChild.children[0]);
+        const newTr = document.createElement('tr');
+        newTr.style = "height: 0px";
+
+        const trlist = document.getElementsByClassName("fc-timegrid-slots");
+        trlist[0].firstElementChild.lastElementChild.insertBefore(newTr, trlist[0].firstElementChild.lastElementChild.children[0]);
 
     }, []);
 
